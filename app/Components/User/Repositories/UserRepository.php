@@ -14,7 +14,17 @@ class UserRepository
             'name' => $user->name,
             'email' => $user->email,
             'mobile_number' => $user->mobileNumber,
-            'password' => Hash::make($user->password),
+            'password' => $user->password,
         ]);
+    }
+
+    public function update(int $id, array $params): void
+    {
+        UserModel::query()->where('id', $id)->update($params);
+    }
+
+    public function delete(int $id): void
+    {
+        UserModel::query()->where('id', $id)->delete();
     }
 }

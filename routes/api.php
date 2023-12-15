@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\User\LoginController;
 use App\Http\Controllers\Auth\User\LogoutController;
 use App\Http\Controllers\Auth\User\RegisterController;
 use App\Http\Controllers\Auth\User\VerifyEmailController;
+use App\Http\Controllers\Profile\User\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,5 +38,13 @@ Route::prefix('/user')->name('user.')->group(function () {
             Route::get('/', 'show')->name('notice');
             Route::get('/verify/{id}/{hash}', 'verify')->name('verify');
             Route::get('/resend', 'resend')->middleware('throttle:6,1')->name('send');
+        });
+
+    Route::prefix('/profile')
+        ->name('profile.')
+        ->middleware('auth:api')
+        ->controller(ProfileController::class)
+        ->group(function () {
+            Route::get('/', 'show')->name('show');
         });
 });

@@ -11,6 +11,7 @@ use App\Http\Requests\Auth\User\RegisterRequest;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Lang;
 
 //@todo Swagger
@@ -23,7 +24,7 @@ class RegisterController extends Controller
                 $request->input('name'),
                 $request->input('email'),
                 $request->input('mobile_number'),
-                $request->input('password')
+                Hash::make($request->input('password'))
             )
         );
 

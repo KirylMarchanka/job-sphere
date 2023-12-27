@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\User\LogoutController;
 use App\Http\Controllers\Auth\User\RegisterController;
 use App\Http\Controllers\Auth\User\VerifyEmailController;
 use App\Http\Controllers\Profile\User\ProfileController;
+use App\Http\Controllers\Resume\Common\SpecializationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -46,5 +47,15 @@ Route::prefix('/user')->name('user.')->group(function () {
         ->controller(ProfileController::class)
         ->group(function () {
             Route::get('/', 'show')->name('show');
+        });
+});
+
+
+Route::prefix('/resumes')->name('resumes.')->group(function () {
+    Route::prefix('/specializations')
+        ->name('specializations.')
+        ->controller(SpecializationController::class)
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
         });
 });

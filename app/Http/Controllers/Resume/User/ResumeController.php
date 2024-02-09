@@ -15,7 +15,9 @@ use App\Components\Resume\Enums\ScheduleEnum;
 use App\Components\Resume\Enums\StatusEnum;
 use App\Components\Resume\Repositories\ResumeRepository;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Resume\User\DeleteResumeRequest;
 use App\Http\Requests\Resume\User\StoreResumeRequest;
+use App\Models\Resume;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
@@ -61,5 +63,12 @@ class ResumeController extends Controller
         );
 
         return Responser::setData(['success' => true])->setHttpCode(Response::HTTP_CREATED)->success();
+    }
+
+    public function delete(DeleteResumeRequest $request, Resume $resume, ResumeRepository $repository): JsonResponse
+    {
+        $repository->setUser($request->user())->delete($resume->getKey());
+
+        return Responser::setData(['success' => true])->success();
     }
 }

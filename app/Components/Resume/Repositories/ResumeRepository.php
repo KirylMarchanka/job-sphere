@@ -88,6 +88,11 @@ class ResumeRepository
         return $resumeModel;
     }
 
+    public function delete(int $resumeId): void
+    {
+        $this->user->resumes()->where('id', $resumeId)->delete();
+    }
+
     public function setUser(User $user): ResumeRepository
     {
         $this->user = $user;

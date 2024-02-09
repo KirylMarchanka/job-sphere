@@ -19,6 +19,8 @@ class Resume extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['title', 'status', 'salary', 'employment', 'schedule', 'description'];
+
     public function specializations(): BelongsToMany
     {
         return $this->belongsToMany(Specialization::class);

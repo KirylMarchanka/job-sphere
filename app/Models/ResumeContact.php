@@ -11,6 +11,10 @@ class ResumeContact extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
+    protected $fillable = ['mobile_number', 'comment', 'email', 'preferred_contact_source', 'other_sources'];
+
     protected function preferredContactSource(): Attribute
     {
         return Attribute::make(
@@ -27,6 +31,7 @@ class ResumeContact extends Model
     {
         return Attribute::make(
             get: fn(?string $value) => ResumeContactParser::parse(json_decode($value, true)),
+            set: fn(?array $value) => $value ? json_encode($value) : null,
         );
     }
 }

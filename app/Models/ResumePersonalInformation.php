@@ -10,6 +10,8 @@ class ResumePersonalInformation extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name', 'surname', 'middle_name', 'birthdate', 'sex', 'city_id'];
+
     public function city(): BelongsTo
     {
         return $this->belongsTo(City::class);

@@ -88,6 +88,75 @@ class ResumeRepository
         return $resumeModel;
     }
 
+    /**
+     * @param int $resumeId
+     * @param ResumeDto $resume
+     * @param array<ResumeSpecializationDto>|null $specializations
+     * @param array<ResumeSkillDto>|null $skills
+     * @param ResumeContactDto|null $contact
+     * @param ResumePersonalInformationDto|null $personalInformation
+     * @param array<ResumeEducationDto>|null $education
+     * @param array<ResumeWorkExperienceDto>|null $workExperience
+     *
+     * @return void
+     */
+    public function update(
+        int                           $resumeId,
+        ResumeDto                     $resume,
+        ?array                        $specializations,
+        ?array                        $skills,
+        ?ResumeContactDto             $contact,
+        ?ResumePersonalInformationDto $personalInformation,
+        ?array                        $education,
+        ?array                        $workExperience,
+    ): void
+    {
+        /** @var Resume $resumeModel */
+        $resumeModel = $this->user->resumes()
+            ->where('id', $resumeId)
+            ->first();
+
+        $resumeModel->update($resume->toArray());
+
+        if (null !== $specializations) {
+            $resumeModel->specializations()->sync(array_map(fn(ResumeSpecializationDto $specialization) => $specialization->id, $specializations));
+        }
+
+        if (null !== $skills) {
+            $resumeModel->skills()->sync(array_map(fn(ResumeSkillDto $skill) => $skill->id, $skills));
+        }
+
+        if (null !== $contact) {
+            $resumeModel->contact()->update($contact->toArray());
+        }
+
+        if (null !== $personalInformation) {
+            $resumeModel->personalInformation()->update($personalInformation->toArray());
+        }
+
+        if (null !== $education) {
+            foreach ($education as $value) {
+                if (null === $value->id) {
+                    $resumeModel->education()->create($value->toArray());
+                    continue;
+                }
+
+                $resumeModel->education()->where('id', $value->id)->update($value->toArray());
+            }
+        }
+
+        if (null !== $workExperience) {
+            foreach ($workExperience as $value) {
+                if (null === $value->id) {
+                    $resumeModel->workExperience()->create($value->toArray());
+                    continue;
+                }
+
+                $resumeModel->workExperience()->where('id', $value->id)->update($value->toArray());
+            }
+        }
+    }
+
     public function delete(int $resumeId): void
     {
         $this->user->resumes()->where('id', $resumeId)->delete();

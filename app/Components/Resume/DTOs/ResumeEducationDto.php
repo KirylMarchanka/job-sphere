@@ -13,6 +13,7 @@ class ResumeEducationDto
     public DegreeEnum $degree;
     public Carbon $startDate;
     public Carbon $endDate;
+    public ?int $id;
 
     public function __construct(
         int        $educationalInstitutionId,
@@ -20,7 +21,8 @@ class ResumeEducationDto
         string     $specialization,
         DegreeEnum $degree,
         Carbon     $startDate,
-        Carbon     $endDate
+        Carbon     $endDate,
+        ?int       $id = null
     )
     {
         $this->educationalInstitutionId = $educationalInstitutionId;
@@ -29,6 +31,7 @@ class ResumeEducationDto
         $this->degree = $degree;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
+        $this->id = $id;
     }
 
     public function toArray(): array

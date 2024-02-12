@@ -13,6 +13,7 @@ class ResumeWorkExperienceDto
     public ?string $description;
     public Carbon $from;
     public ?Carbon $to;
+    public ?int $id;
 
     public function __construct(
         string  $companyName,
@@ -21,7 +22,8 @@ class ResumeWorkExperienceDto
         ?string $siteUrl,
         ?string $description,
         Carbon  $from,
-        ?Carbon $to
+        ?Carbon $to,
+        ?int    $id = null,
     )
     {
         $this->companyName = $companyName;
@@ -31,6 +33,7 @@ class ResumeWorkExperienceDto
         $this->description = $description;
         $this->from = $from;
         $this->to = $to;
+        $this->id = $id;
     }
 
     public function toArray(): array

@@ -143,7 +143,7 @@ class ResumeController extends Controller
                     );
                 }, $education));
             }, fn() => null),
-            $request->whenHas('work_experience', function (array $workExperience) use ($request, $resume) {
+            $request->whenHas('work_experiences', function (array $workExperience) use ($request, $resume) {
                 $resumeWorkExperience = $resume->loadMissing('workExperiences')->getRelation('workExperiences');
 
                 return array_filter(array_map(function (array $workExperience) use ($resumeWorkExperience) {

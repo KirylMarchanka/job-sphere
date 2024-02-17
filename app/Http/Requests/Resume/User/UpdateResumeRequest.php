@@ -122,13 +122,13 @@ class UpdateResumeRequest extends FormRequest
             'education.*.start_date' => ['sometimes', 'date_format:Y-m', 'before_or_equal:today'],
             'education.*.end_date' => ['sometimes', 'date_format:Y-m', 'after_or_equal:education.*.start_date'],
 
-            'work_experience' => [
+            'work_experiences' => [
                 'sometimes',
                 'array',
                 'max:10',
                 new EnsureThatEntityLimitIsNotReached($this->route()->parameter('resume')),
             ],
-            'work_experience.*' => [
+            'work_experiences.*' => [
                 'sometimes',
                 'array:id,company_name,city_id,position,site_url,description,from,to',
                 new EnsureThatAllFieldsArePresented([
@@ -141,14 +141,14 @@ class UpdateResumeRequest extends FormRequest
                     'to',
                 ])
             ],
-            'work_experience.*.id' => ['sometimes', 'integer', 'numeric', 'min:1', Rule::in($this->workExperienceIds)],
-            'work_experience.*.company_name' => ['sometimes', 'string', 'max:255'],
-            'work_experience.*.city_id' => ['sometimes', 'integer', 'numeric', 'min:1', Rule::in($this->cities)],
-            'work_experience.*.position' => ['sometimes', 'string', 'max:255'],
-            'work_experience.*.site_url' => ['sometimes', 'nullable', 'string', 'max:255'],
-            'work_experience.*.description' => ['sometimes', 'nullable', 'string'],
-            'work_experience.*.from' => ['sometimes', 'date_format:Y-m', 'before_or_equal:today'],
-            'work_experience.*.to' => ['sometimes', 'nullable', 'date_format:Y-m', 'before_or_equal:today'],
+            'work_experiences.*.id' => ['sometimes', 'integer', 'numeric', 'min:1', Rule::in($this->workExperienceIds)],
+            'work_experiences.*.company_name' => ['sometimes', 'string', 'max:255'],
+            'work_experiences.*.city_id' => ['sometimes', 'integer', 'numeric', 'min:1', Rule::in($this->cities)],
+            'work_experiences.*.position' => ['sometimes', 'string', 'max:255'],
+            'work_experiences.*.site_url' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'work_experiences.*.description' => ['sometimes', 'nullable', 'string'],
+            'work_experiences.*.from' => ['sometimes', 'date_format:Y-m', 'before_or_equal:today'],
+            'work_experiences.*.to' => ['sometimes', 'nullable', 'date_format:Y-m', 'before_or_equal:today'],
         ];
     }
 }

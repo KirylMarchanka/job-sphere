@@ -10,6 +10,10 @@ use Illuminate\Support\Str;
 
 class EnsureThatEntityLimitIsNotReached implements ValidationRule
 {
+    private const SKILLS_LIMIT = 25;
+    private const WORK_EXPERIENCES_LIMIT = 10;
+    private const DEFAULT_LIMIT = 5;
+
     public function __construct(private readonly Resume $resume)
     {
     }
@@ -37,9 +41,9 @@ class EnsureThatEntityLimitIsNotReached implements ValidationRule
     private function getLimit(string $attribute): int
     {
         return match ($attribute) {
-            'skills' => 25,
-            'work_experience' => 10,
-            default => 5
+            'skills' => self::SKILLS_LIMIT,
+            'work_experiences' => self::WORK_EXPERIENCES_LIMIT,
+            default => self::DEFAULT_LIMIT,
         };
     }
 }

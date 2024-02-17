@@ -79,15 +79,15 @@ class StoreResumeRequest extends FormRequest
             'education.*.start_date' => ['required', 'date_format:Y-m', 'before_or_equal:today'],
             'education.*.end_date' => ['required', 'date_format:Y-m', 'after_or_equal:education.*.start_date'],
 
-            'work_experience' => ['sometimes', 'array', 'max:10'],
-            'work_experience.*' => ['required_with:work_experience', 'array:company_name,city_id,position,site_url,description,from,to'],
-            'work_experience.*.company_name' => ['required_with:work_experience.*', 'string', 'max:255'],
-            'work_experience.*.city_id' => ['required_with:work_experience.*', 'integer', 'numeric', 'min:1', Rule::in($this->cities)],
-            'work_experience.*.position' => ['required_with:work_experience.*', 'string', 'max:255'],
-            'work_experience.*.site_url' => ['sometimes', 'nullable', 'string', 'max:255'],
-            'work_experience.*.description' => ['sometimes', 'nullable', 'string'],
-            'work_experience.*.from' => ['required_with:work_experience.*', 'date_format:Y-m', 'before_or_equal:today'],
-            'work_experience.*.to' => ['sometimes', 'nullable', 'date_format:Y-m', 'before_or_equal:today'],
+            'work_experiences' => ['sometimes', 'array', 'max:10'],
+            'work_experiences.*' => ['required_with:work_experiences', 'array:company_name,city_id,position,site_url,description,from,to'],
+            'work_experiences.*.company_name' => ['required_with:work_experiences.*', 'string', 'max:255'],
+            'work_experiences.*.city_id' => ['required_with:work_experiences.*', 'integer', 'numeric', 'min:1', Rule::in($this->cities)],
+            'work_experiences.*.position' => ['required_with:work_experiences.*', 'string', 'max:255'],
+            'work_experiences.*.site_url' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'work_experiences.*.description' => ['sometimes', 'nullable', 'string'],
+            'work_experiences.*.from' => ['required_with:work_experiences.*', 'date_format:Y-m', 'before_or_equal:today'],
+            'work_experiences.*.to' => ['sometimes', 'nullable', 'date_format:Y-m', 'before_or_equal:today'],
         ];
     }
 
@@ -119,11 +119,11 @@ class StoreResumeRequest extends FormRequest
             return $education;
         }, $this->input('education')));
 
-        if ($this->isNotFilled('work_experience')) {
+        if ($this->isNotFilled('work_experiences')) {
             return;
         }
 
-        $this->offsetSet('work_experience', array_map(function (array $workExperience) {
+        $this->offsetSet('work_experiences', array_map(function (array $workExperience) {
             $workExperience['from'] = Carbon::parse($workExperience['from']);
             $workExperience['to'] = isset($workExperience['to']) ? Carbon::parse($workExperience['to']) : null;
             $workExperience['companyName'] = $workExperience['company_name'];
@@ -133,6 +133,6 @@ class StoreResumeRequest extends FormRequest
             unset($workExperience['company_name'], $workExperience['city_id'], $workExperience['site_url']);
 
             return $workExperience;
-        }, $this->input('work_experience')));
+        }, $this->input('work_experiences')));
     }
 }

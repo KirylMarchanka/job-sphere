@@ -2,6 +2,8 @@
 
 namespace App\Components\Resume\Repositories;
 
+use App\Components\Resume\Contacts\Enums\ResumeContactPreferredContactEnum;
+use App\Components\Resume\Contacts\Helpers\ResumeContactPreferredValueChecker;
 use App\Components\Resume\DTOs\ResumeContactDto;
 use App\Components\Resume\DTOs\ResumeDto;
 use App\Components\Resume\DTOs\ResumeEducationDto;
@@ -15,6 +17,12 @@ use App\Models\User;
 class ResumeRepository
 {
     private User $user;
+    private ResumeContactPreferredValueChecker $contactPreferredValueChecker;
+
+    public function __construct(ResumeContactPreferredValueChecker $contactPreferredValueChecker)
+    {
+        $this->contactPreferredValueChecker = $contactPreferredValueChecker;
+    }
 
     //@todo Статистика? Кол-во просмотров, показов, откликов
     public function all(): array
@@ -75,6 +83,10 @@ class ResumeRepository
 
         if (!empty($skills)) {
             $resumeModel->skills()->attach(array_map(fn(ResumeSkillDto $skill) => $skill->id, $skills));
+        }
+
+        if (!$this->contactPreferredValueChecker->checkFillings(null, $contact->toArray())) {
+            $contact->preferredContactSource = ResumeContactPreferredContactEnum::MOBILE_NUMBER;
         }
 
         $resumeModel->contact()->create($contact->toArray());

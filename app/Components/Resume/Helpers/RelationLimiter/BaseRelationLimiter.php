@@ -50,7 +50,7 @@ abstract class BaseRelationLimiter implements RelationLimiter
         $attached = array_diff($this->value, $current);
         $detached = array_diff($current, $this->value);
 
-        if (!(count($current) - count($detached)) + count($attached) <= $this->limit) {
+        if ((count($current) - count($detached)) + count($attached) > $this->limit) {
             $this->errorMessage = Lang::get(
                 sprintf('validation.resume.%s.limit_reached', Str::slug($this->relation)),
                 ['limit' => $this->limit],

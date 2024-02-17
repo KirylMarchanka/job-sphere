@@ -8,6 +8,10 @@ class ResumeContactParser
     {
         $parsedContacts = [];
         foreach ($contacts as $key => $contact) {
+            if (null === $contact) {
+                continue;
+            }
+
             $parsedContacts[$key] = sprintf('%s/%s', config("socials.$key"), $contact);
         }
 

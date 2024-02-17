@@ -10,14 +10,14 @@ class ResumeContactDto
     public ?string $comment;
     public ?string $email;
     public ResumeContactPreferredContactEnum $preferredContactSource;
-    public ResumeContactOtherSourceDto $otherSources;
+    public ?ResumeContactOtherSourceDto $otherSources;
 
     public function __construct(
         string $mobileNumber,
         ?string $comment,
         ?string $email,
         ResumeContactPreferredContactEnum $preferredContactSource,
-        ResumeContactOtherSourceDto $otherSources
+        ?ResumeContactOtherSourceDto $otherSources
     )
     {
         $this->mobileNumber = $mobileNumber;
@@ -34,7 +34,7 @@ class ResumeContactDto
             'comment' => $this->comment,
             'email' => $this->email,
             'preferred_contact_source' => $this->preferredContactSource->value,
-            'other_sources' => $this->otherSources->toArray(),
+            'other_sources' => $this->otherSources?->toArray(),
         ];
     }
 }

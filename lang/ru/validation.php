@@ -194,7 +194,7 @@ return [
         'education' => [
             'limit_reached' => 'У атрибута :attribute превышен лимит :limit',
         ],
-        'work_experience' => [
+        'work_experiences' => [
             'limit_reached' => 'У атрибута :attribute превышен лимит :limit',
         ],
     ],

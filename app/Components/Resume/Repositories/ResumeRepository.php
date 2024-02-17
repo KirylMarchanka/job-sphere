@@ -36,9 +36,9 @@ class ResumeRepository
             'personalInformation',
             'personalInformation.city',
             'personalInformation.city.country',
-            'workExperience',
-            'workExperience.city',
-            'workExperience.city.country',
+            'workExperiences',
+            'workExperiences.city',
+            'workExperiences.city.country',
             'education',
             'education.educationalInstitution',
             'education.educationalInstitution.city',
@@ -82,7 +82,7 @@ class ResumeRepository
         $resumeModel->education()->createMany(array_map(fn(ResumeEducationDto $educationValue) => $educationValue->toArray(), $education));
 
         if (!empty($workExperience)) {
-            $resumeModel->workExperience()->createMany(array_map(fn(ResumeWorkExperienceDto $workExperienceValue) => $workExperienceValue->toArray(), $workExperience));
+            $resumeModel->workExperiences()->createMany(array_map(fn(ResumeWorkExperienceDto $workExperienceValue) => $workExperienceValue->toArray(), $workExperience));
         }
 
         return $resumeModel;
@@ -148,11 +148,11 @@ class ResumeRepository
         if (null !== $workExperience) {
             foreach ($workExperience as $value) {
                 if (null === $value->id) {
-                    $resumeModel->workExperience()->create($value->toArray());
+                    $resumeModel->workExperiences()->create($value->toArray());
                     continue;
                 }
 
-                $resumeModel->workExperience()->where('id', $value->id)->update($value->toArray());
+                $resumeModel->workExperiences()->where('id', $value->id)->update($value->toArray());
             }
         }
     }

@@ -38,7 +38,7 @@ class UpdateResumeRequest extends FormRequest
         $this->cities = City::query()->select(['id'])->get()->pluck('id')->toArray();
         $this->education = EducationalInstitution::query()->select(['id'])->get()->pluck('id')->toArray();
         $this->educationIds = $this->route()->parameter('resume')->load('education')->getRelation('education')->pluck('id')->toArray();
-        $this->workExperienceIds = $this->route()->parameter('resume')->load('workExperience')->getRelation('workExperience')->pluck('id')->toArray();
+        $this->workExperienceIds = $this->route()->parameter('resume')->load('workExperiences')->getRelation('workExperiences')->pluck('id')->toArray();
     }
 
     public function rules(): array

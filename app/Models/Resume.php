@@ -36,7 +36,7 @@ class Resume extends Model
         return $this->hasOne(ResumePersonalInformation::class);
     }
 
-    public function workExperience(): HasMany
+    public function workExperiences(): HasMany
     {
         return $this->hasMany(ResumeWorkExperience::class)->orderByDesc('from');
     }
@@ -70,7 +70,7 @@ class Resume extends Model
     {
         //@todo Вынести в отдельный класс
         /** @var Collection $exp */
-        $exp = $this->loadMissing('workExperience')->getRelation('workExperience');
+        $exp = $this->loadMissing('workExperiences')->getRelation('workExperiences');
 
         $months = 0;
         $exp->sortBy('from')->each(function (ResumeWorkExperience $workExperience) use (&$months) {

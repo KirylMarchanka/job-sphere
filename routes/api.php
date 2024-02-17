@@ -6,7 +6,9 @@ use App\Http\Controllers\Auth\User\RegisterController;
 use App\Http\Controllers\Auth\User\VerifyEmailController;
 use App\Http\Controllers\Profile\User\ProfileController;
 use App\Http\Controllers\Resume\Common\SpecializationController;
+use App\Http\Controllers\Resume\Education\User\ResumeEducationController;
 use App\Http\Controllers\Resume\User\ResumeController;
+use App\Http\Controllers\Resume\WorkExperience\User\ResumeWorkExperienceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -53,13 +55,32 @@ Route::prefix('/user')->name('user.')->group(function () {
     Route::prefix('/resumes')
         ->name('resumes.')
         ->middleware('auth:api')
-        ->controller(ResumeController::class)
         ->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::get('/{resume}', 'show')->name('show');
-            Route::post('/', 'store')->name('store');
-            Route::patch('/{resume}', 'update')->name('update');
-            Route::delete('/{resume}', 'delete')->name('delete');
+            Route::controller(ResumeController::class)->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/{resume}', 'show')->name('show');
+                Route::post('/', 'store')->name('store');
+                Route::patch('/{resume}', 'update')->name('update');
+                Route::delete('/{resume}', 'delete')->name('delete');
+            });
+
+            Route::prefix('/{resume}')->group(function () {
+                Route::controller(ResumeEducationController::class)
+                    ->prefix('/education')
+                    ->name('education.')
+                    ->scopeBindings()
+                    ->group(function () {
+                        Route::delete('/{education}', 'delete')->name('delete');
+                    });
+
+                Route::controller(ResumeWorkExperienceController::class)
+                    ->prefix('/work_experience')
+                    ->name('work_experience.')
+                    ->scopeBindings()
+                    ->group(function () {
+                        Route::delete('/{work_experience}', 'delete')->name('delete');
+                    });
+            });
         });
 });
 

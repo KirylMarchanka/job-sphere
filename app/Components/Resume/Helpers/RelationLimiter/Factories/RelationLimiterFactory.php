@@ -18,7 +18,7 @@ class RelationLimiterFactory
     {
         return (match ($relation) {
             'specializations', 'skills' => new CommonRelationLimiter(),
-            'education', 'workExperience' => new ArrayIdentificationRelationLimiter(),
+            'education', 'workExperiences' => new ArrayIdentificationRelationLimiter(),
             default => throw new InvalidArgumentException(sprintf('relation [%s] is not supported yet', $relation)),
         })->setRelation($relation);
     }

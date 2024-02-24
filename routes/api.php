@@ -50,6 +50,8 @@ Route::prefix('/user')->name('user.')->group(function () {
         ->controller(ProfileController::class)
         ->group(function () {
             Route::get('/', 'show')->name('show');
+            Route::patch('/', 'update')->name('update');
+            Route::delete('/', 'delete')->name('delete');
         });
 
     Route::prefix('/resumes')

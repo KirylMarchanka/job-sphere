@@ -21,7 +21,7 @@ class UpdateProfileRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => ['required', 'email', Rule::unique('users', 'email')->ignoreModel(Auth::user())],
             'mobile_number' => [
-                'present',
+                'sometimes',
                 'nullable',
                 'string',
                 'max:30',
@@ -36,6 +36,10 @@ class UpdateProfileRequest extends FormRequest
     {
         if ($this->filled('password')) {
             $this->merge(['password' => Hash::make($this->input('password'))]);
+            return;
         }
+
+        $this->offsetUnset('password');
+        $this->offsetUnset('old_password');
     }
 }

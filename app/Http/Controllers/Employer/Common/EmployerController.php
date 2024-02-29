@@ -16,4 +16,9 @@ class EmployerController extends Controller
             ->setData($repository->all($request->input('name'), $request->input('sector')))
             ->success();
     }
+
+    public function show(EmployerRepository $repository, int $employer): JsonResponse
+    {
+        return Responser::setData($repository->show($employer))->success();
+    }
 }

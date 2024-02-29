@@ -42,5 +42,6 @@ Route::prefix('/employers')->name('employers.')->group(function () {
 
     Route::controller(EmployerController::class)->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::get('/{employer_id}', 'show')->name('index');
     });
 });

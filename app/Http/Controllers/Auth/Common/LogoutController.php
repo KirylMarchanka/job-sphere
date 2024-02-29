@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth\User;
+namespace App\Http\Controllers\Auth\Common;
 
 use App\Components\Responser\Facades\Responser;
 use App\Http\Controllers\Controller;
@@ -12,7 +12,11 @@ class LogoutController extends Controller
 {
     public function logout(): JsonResponse
     {
-        Auth::logout();
+        foreach (['api.users', 'api.employers'] as $guard) {
+            if (Auth::guard($guard)->check()) {
+                Auth::guard($guard)->logout();
+            }
+        }
 
         return Responser::setData(['message' => Lang::get('auth.logout.success')])->success();
     }

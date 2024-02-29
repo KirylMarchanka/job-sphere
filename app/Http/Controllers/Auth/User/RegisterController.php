@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth\User;
 
+use App\Components\JWT\Enums\AuthGuardEnum;
 use App\Components\JWT\JWTToken;
 use App\Components\Responser\Facades\Responser;
 use App\Components\User\DTO\User;
@@ -32,7 +33,7 @@ class RegisterController extends Controller
 
         return Responser::setData([
             'message' => Lang::get('auth.verify.email.sent'),
-            'token' => $JWTToken->generate($user)->toArray(),
+            'token' => $JWTToken->setGuard(AuthGuardEnum::USER)->generate($user)->toArray(),
         ])->success();
     }
 }

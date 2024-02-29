@@ -1,15 +1,18 @@
 <?php
 
-namespace App\Components\Auth;
+namespace App\Components\Auth\Common;
 
+use App\Components\Auth\Interfaces\Authenticator;
 use App\Components\JWT\DTO\JWTToken;
 use Illuminate\Support\Facades\Auth;
 
-class UserAuthenticator
+class BaseAuthenticator implements Authenticator
 {
+    protected string $guard;
+
     public function authenticate(string $email, string $password): ?JWTToken
     {
-        $token = Auth::attempt(['email' => $email, 'password' => $password]);
+        $token = Auth::guard($this->guard)->attempt(['email' => $email, 'password' => $password]);
         if (false === $token) {
             return null;
         }

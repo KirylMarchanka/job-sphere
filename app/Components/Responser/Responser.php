@@ -16,13 +16,19 @@ class Responser
 
     private mixed $data = [];
 
+    private bool $wrap = true;
+
     public function success(): JsonResponse
     {
         if ($this->httpCode < 200 || $this->httpCode > 299) {
             $this->httpCode = SymfonyResponse::HTTP_OK;
         }
 
-        return $this->makeResponse(['data' => $this->data]);
+        if ($this->wrap) {
+            $this->data = ['data' => $this->data];
+        }
+
+        return $this->makeResponse($this->data);
     }
 
     public function error(string $message): JsonResponse
@@ -76,5 +82,11 @@ class Responser
     private function makeResponse(mixed $data): JsonResponse
     {
         return response()->json($data, $this->httpCode);
+    }
+
+    public function wrap(bool $wrap = true): Responser
+    {
+        $this->wrap = $wrap;
+        return $this;
     }
 }

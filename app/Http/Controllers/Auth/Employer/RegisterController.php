@@ -21,6 +21,7 @@ class RegisterController extends Controller
         $employer = $repository->store(
             new EmployerDto(
                 $request->input('name'),
+                $request->integer('sector_id'),
                 $request->input('email'),
                 $request->input('description'),
                 $request->input('site_url'),

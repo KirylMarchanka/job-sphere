@@ -17,6 +17,7 @@ class RegisterRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
+            'sector_id' => ['required', 'integer', 'numeric', 'min:1', Rule::exists('sectors', 'id')],
             'email' => ['required', 'email', Rule::unique('employers', 'email')],
             'description' => ['required', 'string'],
             'site_url' => ['sometimes', 'nullable', 'url', 'max:255'],

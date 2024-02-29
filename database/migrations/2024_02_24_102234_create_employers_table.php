@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('employers', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('sector_id')->references('id')->on('sectors')->cascadeOnDelete();
             $table->string('name');
             $table->text('description');
             $table->string('site_url')->nullable();

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Auth\Common\LogoutController;
+use App\Http\Controllers\Employer\Common\EmployerController;
+use App\Http\Controllers\Employer\Common\Sector\SectorController;
 use App\Http\Controllers\Resume\Common\SpecializationController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,4 +30,17 @@ Route::prefix('/resumes')->name('resumes.')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
         });
+});
+
+Route::prefix('/employers')->name('employers.')->group(function () {
+    Route::prefix('/sectors')
+        ->name('sectors.')
+        ->controller(SectorController::class)
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+        });
+
+    Route::controller(EmployerController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+    });
 });

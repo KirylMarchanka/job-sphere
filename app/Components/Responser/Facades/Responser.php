@@ -11,6 +11,7 @@ use App\Components\Responser\Responser as ResponserComponent;
  * @method static ResponserComponent setErrors(array $errors)
  * @method static ResponserComponent setErrorCode(int $errorCode)
  * @method static ResponserComponent setHttpCode(int $httpCode)
+ * @method static ResponserComponent wrap(bool $wrap = true)
  * @method static JsonResponse error(string $message)
  * @method static JsonResponse success()
  */

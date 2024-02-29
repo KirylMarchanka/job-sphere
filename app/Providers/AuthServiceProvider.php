@@ -31,13 +31,15 @@ class AuthServiceProvider extends ServiceProvider
             : Password::min(6)
         );
 
-        VerifyEmail::createUrlUsing(fn(object $notifiable) => URL::temporarySignedRoute(
-            'user.verification.verify',
-            Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
-            [
-                'id' => $notifiable->getKey(),
-                'hash' => sha1($notifiable->getEmailForVerification()),
-            ]
-        ));
+        VerifyEmail::createUrlUsing(function (object $notifiable) {
+            return URL::temporarySignedRoute(
+                $notifiable->getSendEmailVerificationNotificationRoute(),
+                Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
+                [
+                    'id' => $notifiable->getKey(),
+                    'hash' => sha1($notifiable->getEmailForVerification()),
+                ]
+            );
+        });
     }
 }

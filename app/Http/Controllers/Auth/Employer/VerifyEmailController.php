@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Auth\User;
+namespace App\Http\Controllers\Auth\Employer;
 
 use App\Components\Auth\Email\Verify\Common\EmailVerifier;
 use App\Components\JWT\Enums\AuthGuardEnum;
 use App\Components\Responser\Facades\Responser;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\User\ResendVerifyEmailRequest;
+use App\Http\Requests\Auth\Employer\ResendVerifyEmailRequest;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Lang;
@@ -37,8 +37,8 @@ class VerifyEmailController extends Controller
         }
 
         $token = $emailVerifier
-            ->setUser($request->user('api.users'))
-            ->setGuard(AuthGuardEnum::USER)
+            ->setUser($request->user('api.employers'))
+            ->setGuard(AuthGuardEnum::EMPLOYER)
             ->updateEmail($request->input('email'))
             ->sendVerification();
 

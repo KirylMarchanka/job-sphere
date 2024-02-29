@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Employer;
+use App\Models\User;
+
 return [
 
     /*
@@ -14,7 +17,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'api',
+        'guard' => 'api.users',
         'passwords' => 'users',
     ],
 
@@ -42,8 +45,15 @@ return [
         ],
 
         'api' => [
-            'driver' => 'jwt',
-            'provider' => 'users',
+            'users' => [
+                'driver' => 'jwt',
+                'provider' => 'users',
+            ],
+
+            'employers' => [
+                'driver' => 'jwt',
+                'provider' => 'employers',
+            ],
         ],
     ],
 
@@ -67,13 +77,13 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'employers' => [
+            'driver' => 'eloquent',
+            'model' => Employer::class,
+        ],
     ],
 
     /*
@@ -98,6 +108,13 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'employers' => [
+            'provider' => 'employers',
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,

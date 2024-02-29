@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Auth\User;
+namespace App\Http\Requests\Auth\Employer;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +19,7 @@ class ResendVerifyEmailRequest extends FormRequest
             'email' => [
                 'sometimes',
                 'email',
-                Rule::unique('users', 'email')->ignoreModel(Auth::guard('api.users')->user())
+                Rule::unique('employers', 'email')->ignoreModel(Auth::guard('api.employers')->user())
             ]
         ];
     }

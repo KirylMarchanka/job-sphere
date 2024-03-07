@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\Common\LogoutController;
 use App\Http\Controllers\Employer\Common\EmployerController;
 use App\Http\Controllers\Employer\Common\Sector\SectorController;
+use App\Http\Controllers\Employer\Job\Common\JobController;
 use App\Http\Controllers\Resume\Common\SpecializationController;
 use Illuminate\Support\Facades\Route;
 
@@ -43,5 +44,14 @@ Route::prefix('/employers')->name('employers.')->group(function () {
     Route::controller(EmployerController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/{employer_id}', 'show')->name('index');
+    });
+
+    Route::prefix('/{employer_id}')->group(function () {
+        Route::prefix('/jobs')
+            ->controller(JobController::class)
+            ->name('jobs.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+            });
     });
 });

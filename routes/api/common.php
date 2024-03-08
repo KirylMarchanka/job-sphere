@@ -52,6 +52,7 @@ Route::prefix('/employers')->name('employers.')->group(function () {
             ->name('jobs.')
             ->group(function () {
                 Route::get('/', 'index')->name('index');
+                Route::get('/{job}', 'show')->scopeBindings()->name('show');
             });
     });
 });

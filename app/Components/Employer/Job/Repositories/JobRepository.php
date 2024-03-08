@@ -28,7 +28,7 @@ class JobRepository
     public function paginate(PaginateFiltersDto $filters, int $page = 1, int $perPage = 15): array
     {
         return $this->filterApplyer->apply(
-            $this->employer->jobs()->with(['employer:id,name', 'city.country']),
+            $this->employer->jobs()->select(['id', 'employer_id', 'title', 'salary_from', 'salary_to', 'salary_employer_paid_taxes', 'experience', 'city_id'])->with(['employer:id,name', 'city.country']),
             $filters->toArray()
         )->paginate(perPage: $perPage, page: $page)->toArray();
     }

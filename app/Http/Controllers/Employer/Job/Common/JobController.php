@@ -12,6 +12,7 @@ use App\Components\Resume\Enums\ScheduleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Employer\Job\Common\JobIndexRequest;
 use App\Models\Employer;
+use App\Models\EmployerJob;
 use Illuminate\Http\JsonResponse;
 
 class JobController extends Controller
@@ -37,5 +38,10 @@ class JobController extends Controller
         );
 
         return Responser::wrap(false)->setData($data)->success();
+    }
+
+    public function show(Employer $employer, EmployerJob $job): JsonResponse
+    {
+        return Responser::setData($job->load(['employer:id,name', 'city.country', 'skills'])->toArray())->success();
     }
 }

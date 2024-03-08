@@ -2,19 +2,35 @@
 
 namespace App\Components\Employer\Job\Repositories;
 
+use App\Components\Employer\Job\DTO\PaginateFiltersDto;
 use App\Components\Employer\Job\DTO\StoreJobDto;
 use App\Components\Employer\Job\DTO\UpdateJobDto;
+use App\Components\Employer\Job\Filters\JobFilterApplyer;
 use App\Models\Employer;
 use App\Models\EmployerJob;
 
 class JobRepository
 {
     private Employer $employer;
+    private JobFilterApplyer $filterApplyer;
+
+    public function __construct(JobFilterApplyer $filterApplyer)
+    {
+        $this->filterApplyer = $filterApplyer;
+    }
 
     public function setEmployer(Employer $employer): self
     {
         $this->employer = $employer;
         return $this;
+    }
+
+    public function paginate(PaginateFiltersDto $filters, int $page = 1, int $perPage = 15): array
+    {
+        return $this->filterApplyer->apply(
+            $this->employer->jobs()->with(['employer:id,name', 'city.country']),
+            $filters->toArray()
+        )->paginate(perPage: $perPage, page: $page)->toArray();
     }
 
     public function store(StoreJobDto $jobDto): EmployerJob

@@ -51,19 +51,19 @@ class JobController extends Controller
                 }
 
                 return JobExperienceEnum::from($paidTaxes);
-            }, fn() => JobExperienceEnum::from($job->getAttribute('experience'))),
+            }, fn() => JobExperienceEnum::from($job->getRawOriginal('experience'))),
             $request->whenHas('education', function (?int $education) {
                 if (null === $education) {
                     return null;
                 }
 
                 return JobEducationEnum::from($education);
-            }, fn() => JobEducationEnum::from($job->getAttribute('education'))),
-            $request->whenHas('schedule', fn(int $schedule) => ScheduleEnum::from($schedule), fn() => ScheduleEnum::from($job->getAttribute('schedule'))),
-            $request->whenHas('description', fn(string $description) => $description, fn() => $job->getAttribute('description')),
+            }, fn() => JobEducationEnum::from($job->getRawOriginal('education'))),
+            $request->whenHas('schedule', fn(int $schedule) => ScheduleEnum::from($schedule), fn() => ScheduleEnum::from($job->getRawOriginal('schedule'))),
+            $request->whenHas('description', fn(string $description) => $description, fn() => $job->getRawOriginal('description')),
             $request->whenHas('city_id', fn(int $cityId) => $cityId, fn() => $job->getAttribute('city_id')),
             $request->whenHas('street', fn(?string $street) => $street, fn() => $job->getAttribute('street')),
-            $request->whenHas('employment', fn(int $employment) => EmploymentEnum::from($employment), fn() => EmploymentEnum::from($job->getAttribute('employment'))),
+            $request->whenHas('employment', fn(int $employment) => EmploymentEnum::from($employment), fn() => EmploymentEnum::from($job->getRawOriginal('employment'))),
             $request->whenHas('skills', fn(array $skills) => $skills, fn() => $job->load('skills')->getRelation('skills')->pluck('skill_id')->toArray()),
         ));
 

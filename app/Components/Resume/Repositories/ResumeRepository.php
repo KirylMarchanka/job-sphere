@@ -13,15 +13,81 @@ use App\Components\Resume\DTOs\ResumeSpecializationDto;
 use App\Components\Resume\DTOs\ResumeWorkExperienceDto;
 use App\Models\Resume;
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 
 class ResumeRepository
 {
-    private User $user;
-    private ResumeContactPreferredValueChecker $contactPreferredValueChecker;
+    private readonly User $user;
+    private readonly ResumeContactPreferredValueChecker $contactPreferredValueChecker;
 
     public function __construct(ResumeContactPreferredValueChecker $contactPreferredValueChecker)
     {
         $this->contactPreferredValueChecker = $contactPreferredValueChecker;
+    }
+
+    public function paginate(array $data): array
+    {
+        return Resume::query() //@todo Вынести фильтры в классы
+            ->select(['id', 'title', 'status', 'salary', 'employment', 'schedule'])
+            ->with('workExperiences')
+            ->when(isset($data['title']), function (Builder $builder) use ($data) {
+                return $builder->where('title', 'like', "%{$data['title']}%");
+            })
+            ->when(isset($data['isset_salary']), function (Builder $builder) {
+                return $builder->whereNotNull('salary');
+            })
+            ->when(isset($data['salary_from']), function (Builder $builder) use ($data) {
+                return $builder->where('salary', '>=', $data['salary_from']);
+            })
+            ->when(isset($data['salary_to']), function (Builder $builder) use ($data) {
+                return $builder->where('salary', '<=', $data['salary_to']);
+            })
+            ->when(isset($data['employment']), function (Builder $builder) use ($data) {
+                return $builder->whereIn('employment', $data['employment']);
+            })
+            ->when(isset($data['schedule']), function (Builder $builder) use ($data) {
+                return $builder->whereIn('schedule', $data['schedule']);
+            })
+            ->when(isset($data['education_degree']), function (Builder $builder) use ($data) {
+                return $builder->whereHas('education', function (Builder $builder) use ($data) {
+                    return $builder->whereIn('degree', $data['education_degree']);
+                });
+            })
+            ->when(isset($data['specializations']), function (Builder $builder) use ($data) {
+                return $builder->whereHas('specializations', function (Builder $builder) use ($data) {
+                    return $builder->whereIn('specialization_id', $data['specializations']);
+                });
+            })
+            ->when(isset($data['skills']), function (Builder $builder) use ($data) {
+                return $builder->whereHas('skills', function (Builder $builder) use ($data) {
+                    return $builder->whereIn('skill_id', $data['skills']);
+                });
+            })
+            ->when(isset($data['city']), function (Builder $builder) use ($data) {
+                return $builder->whereHas('personalInformation', function (Builder $builder) use ($data) {
+                    return $builder->whereIn('city_id', $data['city']);
+                });
+            })
+            ->when(isset($data['years_from']), function (Builder $builder) use ($data) {
+                return $builder->whereHas('personalInformation', function (Builder $builder) use ($data) {
+                    return $builder->where('birthdate', '>=', Carbon::parse($data['years_from'])->diffInYears(now()));
+                });
+            })
+            ->when(isset($data['years_to']), function (Builder $builder) use ($data) {
+                return $builder->whereHas('personalInformation', function (Builder $builder) use ($data) {
+                    return $builder->where('birthdate', '<=', Carbon::parse($data['years_to'])->diffInYears(now()));
+                });
+            })
+            ->when(isset($data['work_experience']), function (Builder $builder) use ($data) {
+                return $builder->whereHas('workExperiences', function (Builder $builder) use ($data) {
+                    return $builder->whereRaw('(SELECT SUM(TIMESTAMPDIFF(MONTH, `from`, IFNULL(`to`, NOW()))) FROM resume_work_experiences WHERE resume_id = resumes.id) >= ?', [(int)$data['work_experience']]);
+                });
+            })
+            ->orderByDesc('updated_at')
+            ->paginate()
+            ->through(fn(Resume $resume) => $resume->append('total_work_experience')->makeHidden('workExperiences')->toArray())
+            ->toArray();
     }
 
     //@todo Статистика? Кол-во просмотров, показов, откликов

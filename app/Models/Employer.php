@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -50,5 +51,10 @@ class Employer extends Authenticatable implements MustVerifyEmail, JWTSubject
     public function sector(): BelongsTo
     {
         return $this->belongsTo(Sector::class);
+    }
+
+    public function jobs(): HasMany
+    {
+        return $this->hasMany(EmployerJob::class);
     }
 }

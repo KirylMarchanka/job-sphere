@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\Common\LogoutController;
 use App\Http\Controllers\Employer\Common\EmployerController;
 use App\Http\Controllers\Employer\Common\Sector\SectorController;
 use App\Http\Controllers\Employer\Job\Common\JobController;
+use App\Http\Controllers\Resume\Common\ResumeController;
 use App\Http\Controllers\Resume\Common\SpecializationController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,11 @@ Route::name('auth.')->group(function () {
 });
 
 Route::prefix('/resumes')->name('resumes.')->group(function () {
+    Route::controller(ResumeController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/{resume}', 'show')->name('index');
+    });
+
     Route::prefix('/specializations')
         ->name('specializations.')
         ->controller(SpecializationController::class)

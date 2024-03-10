@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Interfaces\SenderInterface;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,7 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Employer extends Authenticatable implements MustVerifyEmail, JWTSubject
+class Employer extends Authenticatable implements MustVerifyEmail, JWTSubject, SenderInterface
 {
     use HasFactory, Notifiable;
 
@@ -56,5 +57,10 @@ class Employer extends Authenticatable implements MustVerifyEmail, JWTSubject
     public function jobs(): HasMany
     {
         return $this->hasMany(EmployerJob::class);
+    }
+
+    public function conversations(): HasMany
+    {
+        return $this->hasMany(Conversation::class);
     }
 }

@@ -240,6 +240,11 @@ class ResumeRepository
         $this->user->resumes()->where('id', $resumeId)->delete();
     }
 
+    public function get(int $id): ?Resume
+    {
+        return Resume::query()->whereKey($id)->first();
+    }
+
     public function setUser(User $user): ResumeRepository
     {
         $this->user = $user;

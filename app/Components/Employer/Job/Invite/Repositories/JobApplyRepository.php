@@ -10,7 +10,6 @@ use App\Models\Resume;
 
 class JobApplyRepository
 {
-
     private Resume $resume;
     private EmployerJob $job;
 
@@ -28,9 +27,19 @@ class JobApplyRepository
 
     public function invite(): JobApply
     {
+        return $this->createJobApply(JobApplyTypeEnum::INVITE);
+    }
+
+    public function apply(): JobApply
+    {
+        return $this->createJobApply(JobApplyTypeEnum::APPLY);
+    }
+
+    private function createJobApply(JobApplyTypeEnum $type): JobApply
+    {
         return $this->job->applies()->create([
             'resume_id' => $this->resume->getKey(),
-            'type' => JobApplyTypeEnum::INVITE->value,
+            'type' => $type->value,
             'status' => JobApplyStatusEnum::WAIT->value,
         ]);
     }

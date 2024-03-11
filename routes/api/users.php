@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\User\LoginController;
 use App\Http\Controllers\Auth\User\RegisterController;
 use App\Http\Controllers\Auth\User\VerifyEmailController;
+use App\Http\Controllers\Employer\Job\User\Applies\ApplyController;
 use App\Http\Controllers\Profile\User\ProfileController;
 use App\Http\Controllers\Resume\Education\User\ResumeEducationController;
 use App\Http\Controllers\Resume\User\ResumeController;
@@ -64,3 +65,9 @@ Route::prefix('/resumes')
                 });
         });
     });
+
+Route::prefix('/jobs')->name('jobs.')->middleware('auth:api.users')->group(function () {
+    Route::controller(ApplyController::class)->group(function () {
+        Route::post('/{job}/apply', 'apply')->name('apply');
+    });
+});

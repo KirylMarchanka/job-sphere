@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\Employer\LoginController;
 use App\Http\Controllers\Auth\Employer\RegisterController;
 use App\Http\Controllers\Auth\Employer\VerifyEmailController;
 use App\Http\Controllers\Employer\Job\Employer\Invites\InviteController;
+use App\Http\Controllers\Employer\Job\Employer\Invites\JobInviteStatusController;
 use App\Http\Controllers\Employer\Job\Employer\JobArchiveStateController;
 use App\Http\Controllers\Employer\Job\Employer\JobController;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,9 @@ Route::prefix('/jobs')
     ->middleware('auth:api.employers')
     ->group(function () {
         Route::post('/', [JobController::class, 'store'])->name('store');
+
+        Route::put('/applies/{apply}/update-status', [JobInviteStatusController::class, 'update'])
+            ->name('applies.update-status');
 
         Route::prefix('/{job}')->group(function () {
             Route::patch('/', [JobController::class, 'update'])->name('update');

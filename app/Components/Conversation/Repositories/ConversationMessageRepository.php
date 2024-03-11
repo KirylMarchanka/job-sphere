@@ -20,6 +20,17 @@ class ConversationMessageRepository
         ]);
     }
 
+    public function readAllMessages(string $senderType): void
+    {
+        $this->conversation
+            ->messages()
+            ->where('sender_type', $senderType)
+            ->whereNull('read_at')
+            ->update(['read_at' => now()->format('Y-m-d H:i:s')]);
+
+        $this->conversation->touch();
+    }
+
     public function setConversation(Conversation $conversation): ConversationMessageRepository
     {
         $this->conversation = $conversation;

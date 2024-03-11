@@ -3,6 +3,8 @@
 namespace App\Components\Conversation\Repositories;
 
 use App\Models\Conversation;
+use App\Models\Interfaces\SenderInterface;
+use App\Models\User;
 
 class ConversationRepository
 {

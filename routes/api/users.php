@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\User\LoginController;
 use App\Http\Controllers\Auth\User\RegisterController;
 use App\Http\Controllers\Auth\User\VerifyEmailController;
 use App\Http\Controllers\Employer\Job\User\Applies\ApplyController;
+use App\Http\Controllers\Employer\Job\User\Applies\ApplyStatusController;
 use App\Http\Controllers\Profile\User\ProfileController;
 use App\Http\Controllers\Resume\Education\User\ResumeEducationController;
 use App\Http\Controllers\Resume\User\ResumeController;
@@ -70,4 +71,7 @@ Route::prefix('/jobs')->name('jobs.')->middleware('auth:api.users')->group(funct
     Route::controller(ApplyController::class)->group(function () {
         Route::post('/{job}/apply', 'apply')->name('apply');
     });
+
+    Route::put('/invites/{apply}/update-status', [ApplyStatusController::class, 'update'])
+        ->name('invites.update-status');
 });

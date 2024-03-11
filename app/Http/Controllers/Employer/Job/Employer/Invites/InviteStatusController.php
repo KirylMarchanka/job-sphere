@@ -7,13 +7,16 @@ use App\Components\Employer\Job\Invite\Enums\JobApplyStatusEnum;
 use App\Components\Employer\Job\Invite\Repositories\JobApplyRepository;
 use App\Components\Responser\Facades\Responser;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Employer\Job\Traits\JobApplyTrait;
 use App\Http\Requests\Employer\Job\Employer\Invites\JobInviteUpdateStatusRequest;
 use App\Models\JobApply;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 
-class JobInviteStatusController extends Controller
+class InviteStatusController extends Controller
 {
+    use JobApplyTrait;
+
     public function update(
         JobInviteUpdateStatusRequest $request,
         JobApply $apply,
@@ -21,15 +24,13 @@ class JobInviteStatusController extends Controller
         ConversationMessageRepository $messageRepository
     ): JsonResponse
     {
-        $jobApplyRepository->setApply($apply)->update(JobApplyStatusEnum::from($request->integer('status')));
-        $conversation = $jobApplyRepository->findRelatedConversation();
-        if (null === $conversation) {
-            return Responser::wrap(false)->setData(['success' => true])->success();
-        }
-
-        $messageRepository->setConversation($conversation)->readAllMessages(User::class);
-        $messageRepository->send($request->user('api.employers'), $request->input('message'));
-
-        return Responser::wrap(false)->setData(['success' => true])->success();
+        return $this->changeApplyStatus(
+            $request->user('api.employers'),
+            $apply,
+            JobApplyStatusEnum::from($request->integer('status')),
+            $request->input('message'),
+            $jobApplyRepository,
+            $messageRepository
+        );
     }
 }

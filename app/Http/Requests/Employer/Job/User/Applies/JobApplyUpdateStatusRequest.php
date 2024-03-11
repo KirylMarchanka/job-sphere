@@ -1,23 +1,23 @@
 <?php
 
-namespace App\Http\Requests\Employer\Job\Employer\Invites;
+namespace App\Http\Requests\Employer\Job\User\Applies;
 
 use App\Components\Employer\Job\Invite\Enums\JobApplyStatusEnum;
 use App\Components\Employer\Job\Invite\Enums\JobApplyTypeEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class JobInviteUpdateStatusRequest extends FormRequest
+class JobApplyUpdateStatusRequest extends FormRequest
 {
     public function authorize(): bool
     {
         $apply = $this->route()->parameter('apply');
 
-        return $apply->getAttribute('type') === JobApplyTypeEnum::APPLY->value
+        return $apply->getAttribute('type') === JobApplyTypeEnum::INVITE->value
             && $apply->getAttribute('status') === JobApplyStatusEnum::WAIT->value
-            && $this->user('api.employers')
-                ->jobs()
-                ->where('id', $apply->getAttribute('employer_job_id'))
+            && $this->user('api.users')
+                ->resumes()
+                ->where('id', $apply->getAttribute('resume_id'))
                 ->exists();
     }
 

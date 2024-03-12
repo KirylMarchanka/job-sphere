@@ -34,6 +34,8 @@ Route::prefix('/profile')
     ->controller(ProfileController::class)
     ->group(function () {
         Route::get('/', 'show')->name('show');
+        Route::patch('/', 'update')->name('update');
+        Route::delete('/', 'destroy')->name('destroy');
     });
 
 Route::prefix('/resumes')

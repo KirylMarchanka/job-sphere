@@ -69,6 +69,7 @@ Route::prefix('/resumes')
 
 Route::prefix('/applies')->name('applies.')->middleware('auth:api.users')->group(function () {
     Route::get('/', [ApplyController::class, 'index']);
+    Route::get('/{apply}', [ApplyController::class, 'show']);
 });
 
 Route::prefix('/jobs')->name('jobs.')->middleware('auth:api.users')->group(function () {

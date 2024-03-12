@@ -21,11 +21,6 @@ class JobApply extends Model
         return $this->belongsTo(Resume::class);
     }
 
-    public function job(): BelongsTo
-    {
-        return $this->belongsTo(EmployerJob::class);
-    }
-
     public function employerJob(): BelongsTo
     {
         return $this->belongsTo(EmployerJob::class);

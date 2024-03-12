@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Job\Traits\JobApplyTrait;
 use App\Http\Requests\Job\User\Applies\JobApplyIndexRequest;
 use App\Http\Requests\Job\User\Applies\JobApplyRequest;
+use App\Http\Requests\Job\User\Applies\JobApplyShowRequest;
 use App\Models\EmployerJob;
 use App\Models\JobApply;
 use App\Models\Resume;
@@ -54,5 +55,17 @@ class ApplyController extends Controller
         })->get()->toArray();
 
         return Responser::setData($applies)->success();
+    }
+
+    public function show(JobApplyShowRequest $request, JobApply $apply): JsonResponse
+    {
+        $apply->loadMissing([
+            'resume',
+            'employerJob.employer',
+            'employerJob.city.country',
+            'conversation.messages',
+        ]);
+
+        return Responser::setData($apply->toArray())->success();
     }
 }

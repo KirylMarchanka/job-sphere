@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Employer\Job\Common;
+namespace App\Http\Requests\Job\Common;
 
 use App\Components\Employer\Job\Enums\JobEducationEnum;
 use App\Components\Employer\Job\Enums\JobExperienceEnum;

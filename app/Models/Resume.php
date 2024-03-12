@@ -57,6 +57,11 @@ class Resume extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function applies(): HasMany
+    {
+        return $this->hasMany(JobApply::class);
+    }
+
     protected function status(): Attribute
     {
         return Attribute::make(get: fn(int $status) => StatusEnum::translations($status));

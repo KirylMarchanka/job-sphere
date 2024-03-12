@@ -8,7 +8,7 @@ use App\Components\Employer\Job\Invite\Repositories\JobApplyRepository;
 use App\Components\Resume\Repositories\ResumeRepository;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Job\Traits\JobApplyTrait;
-use App\Http\Requests\Employer\Job\Employer\Invites\JobInviteRequest;
+use App\Http\Requests\Job\Employer\Invites\JobInviteRequest;
 use App\Models\EmployerJob;
 use Illuminate\Http\JsonResponse;
 

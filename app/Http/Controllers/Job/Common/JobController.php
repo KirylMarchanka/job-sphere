@@ -10,7 +10,7 @@ use App\Components\Responser\Facades\Responser;
 use App\Components\Resume\Enums\EmploymentEnum;
 use App\Components\Resume\Enums\ScheduleEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Employer\Job\Common\JobIndexRequest;
+use App\Http\Requests\Job\Common\JobIndexRequest;
 use App\Models\Employer;
 use App\Models\EmployerJob;
 use Illuminate\Http\JsonResponse;

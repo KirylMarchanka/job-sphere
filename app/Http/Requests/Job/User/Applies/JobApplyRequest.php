@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Requests\Employer\Job\User\Applies;
+namespace App\Http\Requests\Job\User\Applies;
 
-use App\Http\Requests\Employer\Job\BaseJobRequest;
+use App\Http\Requests\Job\BaseJobRequest;
 
 class JobApplyRequest extends BaseJobRequest
 {

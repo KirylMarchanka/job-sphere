@@ -7,7 +7,7 @@ use App\Components\Employer\Job\Invite\Enums\JobApplyStatusEnum;
 use App\Components\Employer\Job\Invite\Repositories\JobApplyRepository;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Job\Traits\JobApplyTrait;
-use App\Http\Requests\Employer\Job\Employer\Invites\JobInviteUpdateStatusRequest;
+use App\Http\Requests\Job\Employer\Invites\JobInviteUpdateStatusRequest;
 use App\Models\JobApply;
 use Illuminate\Http\JsonResponse;
 

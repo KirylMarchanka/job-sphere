@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Requests\Employer\Job\Employer\Invites;
+namespace App\Http\Requests\Job\Employer\Invites;
 
-use App\Http\Requests\Employer\Job\BaseJobRequest;
+use App\Http\Requests\Job\BaseJobRequest;
 
 class JobInviteRequest extends BaseJobRequest
 {

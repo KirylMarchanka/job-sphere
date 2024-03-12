@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Employer\Job;
+namespace App\Http\Requests\Job;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;

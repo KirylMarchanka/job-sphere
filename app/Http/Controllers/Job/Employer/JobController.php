@@ -11,8 +11,8 @@ use App\Components\Responser\Facades\Responser;
 use App\Components\Resume\Enums\EmploymentEnum;
 use App\Components\Resume\Enums\ScheduleEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Employer\Job\JobStoreRequest;
-use App\Http\Requests\Employer\Job\JobUpdateRequest;
+use App\Http\Requests\Job\JobStoreRequest;
+use App\Http\Requests\Job\JobUpdateRequest;
 use App\Models\EmployerJob;
 use Illuminate\Http\JsonResponse;
 

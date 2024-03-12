@@ -3,10 +3,10 @@
 use App\Http\Controllers\Auth\Employer\LoginController;
 use App\Http\Controllers\Auth\Employer\RegisterController;
 use App\Http\Controllers\Auth\Employer\VerifyEmailController;
-use App\Http\Controllers\Employer\Job\Employer\Invites\InviteController;
-use App\Http\Controllers\Employer\Job\Employer\Invites\InviteStatusController;
-use App\Http\Controllers\Employer\Job\Employer\JobArchiveStateController;
-use App\Http\Controllers\Employer\Job\Employer\JobController;
+use App\Http\Controllers\Job\Employer\Invites\InviteController;
+use App\Http\Controllers\Job\Employer\Invites\InviteStatusController;
+use App\Http\Controllers\Job\Employer\JobArchiveStateController;
+use App\Http\Controllers\Job\Employer\JobController;
 use Illuminate\Support\Facades\Route;
 
 Route::name('auth.')->group(function () {

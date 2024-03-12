@@ -3,8 +3,8 @@
 use App\Http\Controllers\Auth\User\LoginController;
 use App\Http\Controllers\Auth\User\RegisterController;
 use App\Http\Controllers\Auth\User\VerifyEmailController;
-use App\Http\Controllers\Employer\Job\User\Applies\ApplyController;
-use App\Http\Controllers\Employer\Job\User\Applies\ApplyStatusController;
+use App\Http\Controllers\Job\User\Applies\ApplyController;
+use App\Http\Controllers\Job\User\Applies\ApplyStatusController;
 use App\Http\Controllers\Profile\User\ProfileController;
 use App\Http\Controllers\Resume\Education\User\ResumeEducationController;
 use App\Http\Controllers\Resume\User\ResumeController;

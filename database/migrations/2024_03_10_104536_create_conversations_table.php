@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('conversations', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->foreignId('user_id')->references('id')->on('users')->cascadeOnDelete();
-            $table->foreignId('employer_id')->references('id')->on('employers')->cascadeOnDelete();
+            $table->foreignId('job_apply_id')->references('id')->on('job_applies')->cascadeOnDelete();
             $table->string('channel');
             $table->timestamps();
         });

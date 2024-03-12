@@ -11,20 +11,15 @@ class Conversation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'employer_id', 'title', 'channel'];
+    protected $fillable = ['job_apply_id', 'title', 'channel'];
 
     public function messages(): HasMany
     {
         return $this->hasMany(ConversationMessage::class);
     }
 
-    public function user(): BelongsTo
+    public function jobApply(): BelongsTo
     {
-        return $this->belongsTo(User::class);
-    }
-
-    public function employer(): BelongsTo
-    {
-        return $this->belongsTo(Employer::class);
+        return $this->belongsTo(JobApply::class);
     }
 }

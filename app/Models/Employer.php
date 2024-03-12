@@ -58,9 +58,4 @@ class Employer extends Authenticatable implements MustVerifyEmail, JWTSubject, S
     {
         return $this->hasMany(EmployerJob::class);
     }
-
-    public function conversations(): HasMany
-    {
-        return $this->hasMany(Conversation::class);
-    }
 }

@@ -4,32 +4,23 @@ namespace App\Components\Conversation\Repositories;
 
 use App\Models\Conversation;
 use App\Models\Interfaces\SenderInterface;
+use App\Models\JobApply;
 use App\Models\User;
 
 class ConversationRepository
 {
-    private int $employer;
-    private int $user;
+    private JobApply $apply;
 
-    public function store(string $title, string $channel): Conversation
+    public function store(string $title, ?string $channel = null): Conversation
     {
-        return Conversation::query()->create([
-            'employer_id' => $this->employer,
-            'user_id' => $this->user,
-            'title' => $title,
-            'channel' => $channel,
-        ]);
+        $channel = $channel ?? sprintf('job_apply_%d', $this->apply->getKey());
+
+        return $this->apply->conversation()->create(['title' => $title, 'channel' => $channel]);
     }
 
-    public function setEmployer(int $employer): ConversationRepository
+    public function setApply(JobApply $apply): ConversationRepository
     {
-        $this->employer = $employer;
-        return $this;
-    }
-
-    public function setUser(int $user): ConversationRepository
-    {
-        $this->user = $user;
+        $this->apply = $apply;
         return $this;
     }
 }

@@ -15,8 +15,8 @@ class JobApply extends Model
 
     protected $fillable = ['resume_id', 'employer_job_id', 'type', 'status'];
 
-    public function conversation(): HasOneThrough
+    public function conversation(): HasOne
     {
-        return $this->hasOneThrough(Conversation::class, Resume::class);
+        return $this->hasOne(Conversation::class);
     }
 }

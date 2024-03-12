@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Employer\Job\Employer;
+namespace App\Http\Controllers\Job\Employer;
 
 use App\Components\Responser\Facades\Responser;
 use App\Http\Controllers\Controller;

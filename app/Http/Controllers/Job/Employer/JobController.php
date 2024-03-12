@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Employer\Job\Employer;
+namespace App\Http\Controllers\Job\Employer;
 
 use App\Components\Employer\Job\DTO\StoreJobDto;
 use App\Components\Employer\Job\DTO\UpdateJobDto;

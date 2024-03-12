@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Employer\Job\Common;
+namespace App\Http\Controllers\Job\Common;
 
 use App\Components\Employer\Job\DTO\PaginateFiltersDto;
 use App\Components\Employer\Job\Enums\JobEducationEnum;

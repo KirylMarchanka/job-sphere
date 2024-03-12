@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Employer\Job\Traits;
+namespace App\Http\Controllers\Job\Traits;
 
 use App\Components\Conversation\Repositories\ConversationMessageRepository;
 use App\Components\Conversation\Repositories\ConversationRepository;
@@ -27,14 +27,11 @@ trait JobApplyTrait
         ConversationMessageRepository $messageRepository
     ): JsonResponse
     {
+        /** @var JobApply $invite */
         $invite = $jobApplyRepository->setResume($resume)->setJob($job)->{$this->applyMethod}();
         $conversation = $conversationRepository
-            ->setEmployer($job->getAttribute('employer_id'))
-            ->setUser($resume->getAttribute('user_id'))
-            ->store(
-                sprintf('Отклик на вакансию %s', $job->getAttribute('title')),
-                "job_apply_{$invite->getKey()}"
-            );
+            ->setApply($invite)
+            ->store(sprintf('Отклик на вакансию %s', $job->getAttribute('title')));
 
         $messageRepository->setConversation($conversation)->send($sender, $message);
 
@@ -51,7 +48,7 @@ trait JobApplyTrait
     ): JsonResponse
     {
         $jobApplyRepository->setApply($apply)->update($status);
-        $conversation = $jobApplyRepository->findRelatedConversation();
+        $conversation = $apply->conversation()->first();
         if (null === $conversation) {
             return Responser::wrap(false)->setData(['success' => true])->success();
         }

@@ -18,14 +18,14 @@ class EmployerRepository
 
     public function all(?string $name, ?int $sector): LengthAwarePaginator
     {
-        $builder = Employer::query()->with(['']);
+        $builder = Employer::query()->with(['sector.parent']);
 
         return $this->filterApplyer->apply($builder, ['name' => $name, 'sector' => $sector])->paginate();
     }
 
     public function show(int $employer, array $select = ['*']): array
     {
-        return Employer::query()->select($select)->with('sector.parent')->whereKey($employer)->first()->toArray();
+        return Employer::query()->select($select)->with(['sector.parent', 'jobs'])->whereKey($employer)->first()->toArray();
     }
 
     public function store(EmployerDto $employer): Employer

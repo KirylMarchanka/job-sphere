@@ -26,17 +26,17 @@ Route::name('auth.')->group(function () {
 });
 
 Route::prefix('/resumes')->name('resumes.')->group(function () {
-    Route::controller(ResumeController::class)->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/{resume}', 'show')->name('index');
-    });
-
     Route::prefix('/specializations')
         ->name('specializations.')
         ->controller(SpecializationController::class)
         ->group(function () {
             Route::get('/', 'index')->name('index');
         });
+
+    Route::controller(ResumeController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/{resume}', 'show')->name('index');
+    });
 });
 
 Route::prefix('/employers')->name('employers.')->group(function () {

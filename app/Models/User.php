@@ -71,7 +71,7 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject, Sende
 
     public function getSendEmailVerificationNotificationRoute(): string
     {
-        return 'user.verification.verify';
+        return 'users.verification.verify';
     }
 
     public function resumes(): HasMany

@@ -6,5 +6,5 @@ use App\Components\Auth\Common\BaseAuthenticator;
 
 class EmployerAuthenticator extends BaseAuthenticator
 {
-    protected string $guard = 'api.employers';
+    protected string $guard = 'web.employers';
 }

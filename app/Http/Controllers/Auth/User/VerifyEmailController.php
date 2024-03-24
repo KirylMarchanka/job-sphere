@@ -5,14 +5,16 @@ namespace App\Http\Controllers\Auth\User;
 use App\Components\Auth\Email\Verify\Common\EmailVerifier;
 use App\Components\JWT\Enums\AuthGuardEnum;
 use App\Components\Responser\Facades\Responser;
+use App\Components\User\Repositories\UserRepository;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\User\ResendVerifyEmailRequest;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
 use Symfony\Component\HttpFoundation\Response;
 
-//@todo Swagger
 class VerifyEmailController extends Controller
 {
     public function show(): JsonResponse
@@ -21,12 +23,24 @@ class VerifyEmailController extends Controller
             ->success();
     }
 
-    public function verify(EmailVerificationRequest $request): JsonResponse
+    public function verify(Request $request, UserRepository $repository): RedirectResponse
     {
-        $request->fulfill();
+        $user = $repository->find($request->input('id', 0));
+        if (null === $user) {
+            return redirect()->route('index')->with('notification', [
+                'message' => 'Пользователь для подтверждения не найден.'
+            ]);
+        }
 
-        return Responser::setData(['message' => Lang::get('auth.email.verified')])
-            ->success();
+        if (!$user->hasVerifiedEmail()) {
+            $user->markEmailAsVerified();
+
+            event(new Verified($user));
+        }
+
+        return redirect()->route('users.auth.login')->with('notification', [
+            'message' => Lang::get('auth.verify.email.verified'),
+        ]);
     }
 
     public function resend(ResendVerifyEmailRequest $request, EmailVerifier $emailVerifier): JsonResponse

@@ -7,6 +7,11 @@ use App\Models\User as UserModel;
 
 class UserRepository
 {
+    public function find(int $id): ?UserModel
+    {
+        return UserModel::query()->find($id);
+    }
+
     public function store(User $user): UserModel
     {
         return UserModel::query()->create($user->toArray());

@@ -2,23 +2,25 @@
 
 namespace App\Http\Controllers\Auth\User;
 
-use App\Components\JWT\Enums\AuthGuardEnum;
-use App\Components\JWT\JWTToken;
-use App\Components\Responser\Facades\Responser;
 use App\Components\User\DTO\User;
 use App\Components\User\Repositories\UserRepository;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\User\RegisterRequest;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Lang;
 
-//@todo Swagger
 class RegisterController extends Controller
 {
-    public function register(RegisterRequest $request, UserRepository $repository, JWTToken $JWTToken): JsonResponse
+    public function show(): View
+    {
+        return view('auth.register.users');
+    }
+
+    public function register(RegisterRequest $request, UserRepository $repository): RedirectResponse
     {
         $user = $repository->store(
             new User(
@@ -31,9 +33,9 @@ class RegisterController extends Controller
 
         Event::dispatch(new Registered($user));
 
-        return Responser::setData([
-            'message' => Lang::get('auth.verify.email.sent'),
-            'token' => $JWTToken->setGuard(AuthGuardEnum::USER)->generate($user)->toArray(),
-        ])->success();
+        return redirect()->route('index')->with('notification', [
+            'header' => Lang::get('auth.verify.email.sent-header'),
+            'message' => Lang::get('auth.verify.email.sent-body'),
+        ]);
     }
 }

@@ -2,9 +2,9 @@
 
 namespace App\Components\Auth\Interfaces;
 
-use App\Components\JWT\DTO\JWTToken;
+use Symfony\Component\HttpFoundation\Response;
 
 interface Authenticator
 {
-    public function authenticate(string $email, string $password): ?JWTToken;
+    public function authenticate(string $email, string $password, bool $remember = false): Response;
 }

@@ -8,7 +8,7 @@
                 </div>
                 <div class="modal-footer">
                     <a class="btn btn-primary" href="{{ route('users.auth.login-show') }}">Соискатель</a>
-                    <a class="btn btn-primary" href="#">Работодатель</a>
+                    <a class="btn btn-primary" href="{{ route('employers.auth.login-show') }}">Работодатель</a>
                 </div>
             </div>
         </div>

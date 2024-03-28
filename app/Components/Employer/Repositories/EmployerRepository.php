@@ -16,11 +16,16 @@ class EmployerRepository
         $this->filterApplyer = $filterApplyer;
     }
 
-    public function all(?string $name, ?int $sector): LengthAwarePaginator
+    public function all(?string $name = null, ?int $sector = null, ?int $perPage = null, bool $randomSort = false): LengthAwarePaginator
     {
         $builder = Employer::query()->with(['sector.parent']);
 
-        return $this->filterApplyer->apply($builder, ['name' => $name, 'sector' => $sector])->paginate();
+        return $this->filterApplyer->apply($builder, ['name' => $name, 'sector' => $sector])->paginate(perPage: $perPage);
+    }
+
+    public function get(int $limit): array
+    {
+        return Employer::query()->with(['sector.parent'])->withCount('jobs')->limit($limit)->get()->toArray();
     }
 
     public function show(int $employer, array $select = ['*']): array
@@ -31,5 +36,10 @@ class EmployerRepository
     public function store(EmployerDto $employer): Employer
     {
         return Employer::query()->create($employer->toArray());
+    }
+
+    public function find(int $key): ?Employer
+    {
+        return Employer::query()->whereKey($key)->first();
     }
 }

@@ -1,4 +1,4 @@
-@php use Illuminate\Support\Facades\Session; @endphp
+@php use Illuminate\Support\Facades\Auth;use Illuminate\Support\Facades\Session; @endphp
 
 @include('components.auth.modals.login')
 @include('components.auth.modals.register')
@@ -31,7 +31,11 @@
                 @include('layout.auth.user-header-links')
             @endauth
 
-            @guest
+            @auth('web.employers')
+                @include('layout.auth.employer-header-links')
+            @endauth
+
+            @if(!Auth::guard('web.users')->check() && !Auth::guard('web.employers')->check())
                 <li class="nav-item">
                     <button class="btn btn-sm nav-link fs-6" type="submit" data-bs-toggle="modal"
                             data-bs-target="#login-modal">Войти
@@ -43,7 +47,7 @@
                             data-bs-target="#register-modal">Зарегистрироваться
                     </button>
                 </li>
-            @endguest
+            @endif
         </ul>
     </div>
 </nav>

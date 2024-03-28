@@ -46,7 +46,7 @@ class Employer extends Authenticatable implements MustVerifyEmail, JWTSubject, S
 
     public function getSendEmailVerificationNotificationRoute(): string
     {
-        return 'employer.verification.verify';
+        return 'employers.verification.verify';
     }
 
     public function sector(): BelongsTo

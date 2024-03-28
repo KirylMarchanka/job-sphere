@@ -18,6 +18,7 @@ class LoginRequest extends FormRequest
         return [
             'email' => ['required', 'email', Rule::exists('employers', 'email')],
             'password' => ['required', Password::default()],
+            'remember_me' => ['sometimes', 'accepted'],
         ];
     }
 }

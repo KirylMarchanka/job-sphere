@@ -12,6 +12,8 @@ class SectorController extends Controller
 {
     public function index(IndexSectorRequest $request, SectorRepository $repository): JsonResponse
     {
-        return Responser::setData($repository->all($request->input('parent_id')))->success();
+        return Responser::setData(
+            $repository->all(['parent' => $request->input('parent_id')])
+        )->success();
     }
 }

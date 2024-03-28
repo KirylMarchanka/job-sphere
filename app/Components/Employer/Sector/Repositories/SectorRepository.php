@@ -7,12 +7,15 @@ use Illuminate\Database\Eloquent\Builder;
 
 class SectorRepository
 {
-    public function all(?int $parentId, array $select = ['*']): array
+    public function all(array $select = ['*']): array
     {
-        return Sector::query()->select($select)->when(
-            $parentId,
-            fn(Builder $builder) => $builder->where('parent_id', $parentId),
-            fn(Builder $builder) => $builder->whereNull('parent_id')
-        )->with('parent')->get()->toArray();
+        return Sector::query()
+            ->select($select)
+            ->orderByRaw("CASE WHEN parent_id IS NULL THEN id ELSE parent_id END") // Order parents before children
+            ->orderBy('parent_id')
+            ->orderBy('id')
+            ->with('parent')
+            ->get()
+            ->toArray();
     }
 }

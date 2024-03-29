@@ -32,6 +32,8 @@ class EmployerJob extends Model
         'is_archived',
     ];
 
+    protected $appends = ['salary'];
+
     public function employer(): BelongsTo
     {
         return $this->belongsTo(Employer::class);
@@ -70,5 +72,32 @@ class EmployerJob extends Model
     protected function employment(): Attribute
     {
         return Attribute::make(get: fn(int $employment) => EmploymentEnum::translations($employment));
+    }
+
+    protected function salary(): Attribute
+    {
+        return Attribute::make(get: function () {
+            $salaryFrom = $this->getAttribute('salary_from');
+            $salaryTo = $this->getAttribute('salary_to');
+
+            if (null === $salaryFrom && null === $salaryTo) {
+                return 'Не указано.';
+            }
+
+            $paidTaxed = 'Брутто';
+            if ($this->getAttribute('salary_employer_paid_taxes')) {
+                $paidTaxed = 'Нетто';
+            }
+
+            if (null === $salaryTo) {
+                return sprintf('От %d руб. (%s)', $salaryFrom, $paidTaxed);
+            }
+
+            if (null === $salaryFrom) {
+                return sprintf('До %d руб. (%s)', $salaryFrom, $paidTaxed);
+            }
+
+            return sprintf('%d - %d руб. (%s)', $salaryFrom, $salaryTo, $paidTaxed);
+        });
     }
 }

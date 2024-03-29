@@ -8,6 +8,7 @@ use App\Components\Employer\Job\DTO\UpdateJobDto;
 use App\Components\Employer\Job\Filters\JobFilterApplyer;
 use App\Models\Employer;
 use App\Models\EmployerJob;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class JobRepository
 {
@@ -76,5 +77,15 @@ class JobRepository
         ]);
 
         $job->skills()->sync($jobDto->skills);
+    }
+
+    public function getPreviewJobs(): array
+    {
+        return EmployerJob::query()->with(['employer', 'city.country'])
+            ->with('skills', fn(BelongsToMany $builder) => $builder->limit(5))
+            ->inRandomOrder()
+            ->limit(5)
+            ->get()
+            ->toArray();
     }
 }

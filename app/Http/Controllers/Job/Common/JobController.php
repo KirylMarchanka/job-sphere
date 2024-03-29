@@ -13,7 +13,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Job\Common\JobIndexRequest;
 use App\Models\Employer;
 use App\Models\EmployerJob;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
@@ -40,8 +42,32 @@ class JobController extends Controller
         return Responser::wrap(false)->setData($data)->success();
     }
 
-    public function show(Employer $employer, EmployerJob $job): JsonResponse
+    public function show(Request $request, Employer $employer, EmployerJob $job): View
     {
-        return Responser::setData($job->load(['employer:id,name', 'city.country', 'skills'])->toArray())->success();
+        return view('employers.jobs.show', [
+            'employer' => $employer,
+            'job' => $job->load(['city.country', 'skills'])->toArray(),
+            'previousPage' => $this->getPreviousPage($request->headers->get('referer'))
+        ]);
+    }
+
+    private function getPreviousPage(?string $referer): int
+    {
+        if (null === $referer) {
+            return 1;
+        }
+
+        $parsed = parse_url($referer);
+        if (!array_key_exists('query', $parsed)) {
+            return 1;
+        }
+
+        $result = [];
+        parse_str($parsed['query'], $result);
+        if (!array_key_exists('page', $result)) {
+            return 1;
+        }
+
+        return intval($result['page']);
     }
 }

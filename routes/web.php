@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\User\LoginController;
 use App\Http\Controllers\Auth\User\LogoutController;
 use App\Http\Controllers\Auth\User\RegisterController;
 use App\Http\Controllers\Auth\User\VerifyEmailController;
+use App\Http\Controllers\Job\Common\JobController;
 use App\Http\Controllers\Main\MainPageController;
 use Illuminate\Support\Facades\Route;
 
@@ -40,3 +41,8 @@ Route::prefix('/users')->name('users.')->group(function () {
     });
 });
 
+Route::prefix('/employers')->name('employers.')->group(function () {
+    Route::prefix('/{employer}/jobs')->name('jobs.')->group(function () {
+        Route::get('/{job}', [JobController::class, 'show'])->name('show');
+    });
+});

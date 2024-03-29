@@ -83,6 +83,7 @@ class JobRepository
     {
         return EmployerJob::query()->with(['employer', 'city.country'])
             ->with('skills', fn(BelongsToMany $builder) => $builder->limit(5))
+            ->where('is_archived', false)
             ->inRandomOrder()
             ->limit(5)
             ->get()

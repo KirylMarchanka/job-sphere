@@ -13,6 +13,9 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
+                        @if($job['is_archived'])
+                            <p class="badge bg-danger fs-5">Архивная вакансия</p>
+                        @endif
                         <div class="col-md-8">
                             <h5>Описание</h5>
                             <p class="card-text">{{ $job['description'] }}</p>
@@ -31,16 +34,18 @@
                             <h5>Дополнительные детали</h5>
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">График: {{ sprintf('%s, %s', $job['employment'], $job['schedule']) }}</li>
-                                <li class="list-group-item">Расположение: {{ $job['city']['city_with_country'] }}</li>
+                                <li class="list-group-item">Расположение: {{ sprintf('%s, %s', $job['city']['city_with_country'], $job['street'])  }}</li>
                                 <li class="list-group-item">Зарплата: {{ $job['salary'] }}</li>
                             </ul>
-                            @auth('web.users')
-                                <a href="#" class="btn btn-success mt-3">Откликнуться</a>
-                            @endauth
+                            @if(!$job['is_archived'])
+                                @auth('web.users')
+                                    <a href="#" class="btn btn-success mt-3">Откликнуться</a>
+                                @endauth
 
-                            @guest('web.users')
-                                <a href="#" class="btn btn-success mt-3">Войти для отклика</a>
-                            @endguest
+                                @guest('web.users')
+                                    <a href="#" class="btn btn-success mt-3">Войти для отклика</a>
+                                @endguest
+                            @endif
 
                             <a href="http://localhost?page={{ $previousPage }}" class="btn btn-primary mt-3">Назад к вакансиям</a>
                         </div>

@@ -41,6 +41,10 @@ Route::prefix('/users')->name('users.')->group(function () {
     });
 });
 
+Route::prefix('/jobs')->name('jobs.')->group(function () {
+    Route::get('/', [JobController::class, 'index'])->name('index');
+});
+
 Route::prefix('/employers')->name('employers.')->group(function () {
     Route::prefix('/{employer}/jobs')->name('jobs.')->group(function () {
         Route::get('/{job}', [JobController::class, 'show'])->name('show');

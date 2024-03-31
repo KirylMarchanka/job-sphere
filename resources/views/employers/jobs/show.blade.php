@@ -43,7 +43,7 @@
                                 @endauth
 
                                 @guest('web.users')
-                                    <a href="#" class="btn btn-success mt-3">Войти для отклика</a>
+                                    <a href="{{ route('users.auth.login-show') }}" class="btn btn-success mt-3">Войти для отклика</a>
                                 @endguest
                             @endif
 

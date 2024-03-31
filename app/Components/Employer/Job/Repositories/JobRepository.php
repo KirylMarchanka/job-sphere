@@ -8,6 +8,7 @@ use App\Components\Employer\Job\DTO\UpdateJobDto;
 use App\Components\Employer\Job\Filters\JobFilterApplyer;
 use App\Models\Employer;
 use App\Models\EmployerJob;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class JobRepository
@@ -26,12 +27,23 @@ class JobRepository
         return $this;
     }
 
-    public function paginate(PaginateFiltersDto $filters, int $page = 1, int $perPage = 15): array
+    public function paginate(PaginateFiltersDto $filters, int $page = 1, int $perPage = 15): LengthAwarePaginator
     {
-        return $this->filterApplyer->apply(
-            $this->employer->jobs()->select(['id', 'employer_id', 'title', 'salary_from', 'salary_to', 'salary_employer_paid_taxes', 'experience', 'city_id'])->with(['employer:id,name', 'city.country']),
-            $filters->toArray()
-        )->paginate(perPage: $perPage, page: $page)->toArray();
+        $jobs = EmployerJob::query()->select([
+            'id',
+            'employer_id',
+            'title',
+            'salary_from',
+            'salary_to',
+            'salary_employer_paid_taxes',
+            'experience',
+            'city_id',
+            'employment',
+            'schedule',
+            'description',
+        ])->with(['employer:id,name', 'city.country', 'skills']);
+
+        return $this->filterApplyer->apply($jobs, $filters->toArray())->paginate(perPage: $perPage, page: $page);
     }
 
     public function store(StoreJobDto $jobDto): EmployerJob

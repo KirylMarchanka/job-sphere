@@ -6,7 +6,6 @@ use App\Components\Employer\Job\DTO\PaginateFiltersDto;
 use App\Components\Employer\Job\Enums\JobEducationEnum;
 use App\Components\Employer\Job\Enums\JobExperienceEnum;
 use App\Components\Employer\Job\Repositories\JobRepository;
-use App\Components\Responser\Facades\Responser;
 use App\Components\Resume\Enums\EmploymentEnum;
 use App\Components\Resume\Enums\ScheduleEnum;
 use App\Http\Controllers\Controller;
@@ -14,14 +13,13 @@ use App\Http\Requests\Job\Common\JobIndexRequest;
 use App\Models\Employer;
 use App\Models\EmployerJob;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
-    public function index(JobIndexRequest $request, Employer $employer, JobRepository $repository): JsonResponse
+    public function index(JobIndexRequest $request, Employer $employer, JobRepository $repository): View
     {
-        $data = $repository->setEmployer($employer)->paginate(
+        $jobs = $repository->setEmployer($employer)->paginate(
             new PaginateFiltersDto(
                 title: $request->input('title'),
                 isArchived: false,
@@ -36,10 +34,10 @@ class JobController extends Controller
                 skills: $request->input('skills'),
             ),
             $request->integer('page', 1),
-            $request->integer('per_page', 15)
+            $request->integer('per_page', 10)
         );
 
-        return Responser::wrap(false)->setData($data)->success();
+        return view('employers.jobs.index', ['jobs' => $jobs]);
     }
 
     public function show(Request $request, Employer $employer, EmployerJob $job): View

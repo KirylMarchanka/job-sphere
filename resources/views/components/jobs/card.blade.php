@@ -8,11 +8,13 @@
                 <li class="list-group-item">Зарплата: <span class="fw-bold">{{ $job['salary'] }}</span></li>
                 <li class="list-group-item">{{ $job['city']['city_with_country'] }}</li>
                 <li class="list-group-item">{{ sprintf('%s, %s', $job['employment'], $job['schedule']) }}</li>
-                <li class="list-group-item">
-                    @foreach($job['skills'] as $skill)
-                        @include('components.jobs.skill-badge', ['skill' => $skill['name']])
-                    @endforeach
-                </li>
+                @if(!empty($job['skills']))
+                    <li class="list-group-item">
+                        @foreach($job['skills'] as $skill)
+                            @include('components.jobs.skill-badge', ['skill' => $skill['name']])
+                        @endforeach
+                    </li>
+                @endif
                 <li class="list-group-item">Требуемый опыт работы: {{ $job['experience'] }}</li>
             </ul>
         </div>

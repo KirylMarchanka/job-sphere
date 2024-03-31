@@ -8,8 +8,10 @@
         @endforeach
     </div>
 
-{{--    <h3>Работодатели</h3>--}}
-{{--    @foreach($employers as $employer)--}}
-{{--        @include('components.employers.card', ['employer' => $employer])--}}
-{{--    @endforeach--}}
+    <h3 class="my-3">Работодатели</h3>
+    <div class="row">
+        @foreach($employers as $employer)
+            @include('components.employers.card', ['employer' => $employer])
+        @endforeach
+    </div>
 @endsection

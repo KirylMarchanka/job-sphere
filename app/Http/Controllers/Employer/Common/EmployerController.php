@@ -6,6 +6,7 @@ use App\Components\Employer\Repositories\EmployerRepository;
 use App\Components\Responser\Facades\Responser;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Employer\Common\IndexEmployerRequest;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 
 class EmployerController extends Controller
@@ -17,8 +18,10 @@ class EmployerController extends Controller
             ->success();
     }
 
-    public function show(EmployerRepository $repository, int $employer): JsonResponse
+    public function show(EmployerRepository $repository, int $employer): View
     {
-        return Responser::setData($repository->show($employer))->success();
+        return view('employers.show', [
+            'employer' => $repository->show($employer),
+        ]);
     }
 }

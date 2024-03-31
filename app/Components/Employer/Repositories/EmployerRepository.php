@@ -6,6 +6,7 @@ use App\Components\Employer\DTO\Employer as EmployerDto;
 use App\Components\Employer\Filters\EmployerFilterApplyer;
 use App\Models\Employer;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 
 class EmployerRepository
 {
@@ -23,9 +24,11 @@ class EmployerRepository
         return $this->filterApplyer->apply($builder, ['name' => $name, 'sector' => $sector])->paginate(perPage: $perPage);
     }
 
-    public function get(int $limit): array
+    public function getPreviewEmployers(): array
     {
-        return Employer::query()->with(['sector.parent'])->withCount('jobs')->limit($limit)->get()->toArray();
+        return Employer::query()->with(['sector.parent'])->withCount('jobs')->whereHas('jobs', function (Builder $builder) {
+            return $builder->where('is_archived', false);
+        })->limit(5)->get()->toArray();
     }
 
     public function show(int $employer, array $select = ['*']): array

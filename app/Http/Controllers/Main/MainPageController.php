@@ -12,7 +12,7 @@ class MainPageController extends Controller
     public function index(EmployerRepository $employerRepository, JobRepository $jobRepository): View
     {
         return view()->make('welcome', [
-            'employers' => $employerRepository->get(limit: 10),
+            'employers' => $employerRepository->getPreviewEmployers(),
             'jobs' => $jobRepository->getPreviewJobs(),
         ]);
     }

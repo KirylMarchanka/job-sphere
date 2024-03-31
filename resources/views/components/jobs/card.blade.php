@@ -20,7 +20,7 @@
         </div>
         <div class="card-footer">
             <a href="{{ route('employers.jobs.show', ['employer' => $job['employer']['id'], 'job' => $job['id']]) }}" class="btn btn-primary">Детали</a>
-            <a href="#" class="btn btn-secondary">О Компании</a>
+            <a href="{{ route('employers.show', ['employer' => $job['employer']['id']]) }}" class="btn btn-secondary">О Компании</a>
         </div>
     </div>
 </div>

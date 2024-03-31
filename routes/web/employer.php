@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\Employer\LoginController;
 use App\Http\Controllers\Auth\Employer\LogoutController;
 use App\Http\Controllers\Auth\Employer\RegisterController;
 use App\Http\Controllers\Auth\Employer\VerifyEmailController;
+use App\Http\Controllers\Employer\Common\EmployerController;
 use Illuminate\Support\Facades\Route;
 
 Route::name('auth.')->group(function () {
@@ -23,3 +24,5 @@ Route::name('auth.')->group(function () {
 Route::name('verification.')->group(function () {
     Route::get('/verify', [VerifyEmailController::class, 'verify'])->name('verify');
 });
+
+Route::get('/{employer}', [EmployerController::class, 'show'])->name('show');

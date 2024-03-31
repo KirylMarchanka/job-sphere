@@ -5,9 +5,8 @@
         <div class="col-md-12">
             <div class="card mb-3">
                 <div class="card-header">
-                    <h1>{{ $job['title'] }}</h1>
-{{--                    <a class="h5 card-subtitle mb-2 text-muted" href="{{ route('employers.show', ['employer' => $employer['id']]) }}">--}}
-                    <a class="h5 card-subtitle mb-2 text-muted" href="#">
+                    <h1 class="display-4">{{ $job['title'] }}</h1>
+                    <a class="h5 card-subtitle mb-2 text-muted" href="{{ route('employers.show', ['employer' => $employer['id']]) }}">
                         {{ $employer['name'] }}
                     </a>
                 </div>
@@ -47,7 +46,7 @@
                                 @endguest
                             @endif
 
-                            <a href="http://localhost?page={{ $previousPage }}" class="btn btn-primary mt-3">Назад к вакансиям</a>
+                            <a href="{{ route('jobs.index', ['page' => $previousPage]) }}" class="btn btn-primary mt-3">Назад к вакансиям</a>
                         </div>
                     </div>
                 </div>

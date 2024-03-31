@@ -1,4 +1,4 @@
-<form action="{{ route('employers.index') }}" method="GET" class="mb-3">
+<form action="{{ route('employers.index') }}" class="mb-3">
     <div class="form-group">
         <label class="mb-1" for="name">Наименование:</label>
         <input type="text" id="name" name="name" class="form-control" placeholder="Поиск по наименованию"

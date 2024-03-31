@@ -1,4 +1,4 @@
-<div class="col-md-6">
+<div class="col-md-12">
     <div class="card mb-3">
         <div class="card-header">{{ $job['employer']['name'] }}</div>
         <div class="card-body">

@@ -25,4 +25,14 @@ enum JobExperienceEnum: int
             default => throw new InvalidArgumentException('Invalid experience provided', Response::HTTP_INTERNAL_SERVER_ERROR),
         };
     }
+
+    public static function toArray(): array
+    {
+        return [
+            JobExperienceEnum::NO_EXPERIENCE->value => Lang::get('job.experience.no_experience'),
+            JobExperienceEnum::BETWEEN_ONE_AND_THREE->value => Lang::get('job.experience.between_one_and_three'),
+            JobExperienceEnum::BETWEEN_THREE_AND_SIX->value => Lang::get('job.experience.between_three_and_six'),
+            JobExperienceEnum::MORE_THAN_SIX->value => Lang::get('job.experience.more_than_six'),
+        ];
+    }
 }

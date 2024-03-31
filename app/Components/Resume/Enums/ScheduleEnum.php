@@ -25,4 +25,14 @@ enum ScheduleEnum: int
             default => throw new InvalidArgumentException('Invalid schedule provided', Response::HTTP_INTERNAL_SERVER_ERROR),
         };
     }
+
+    public static function toArray(): array
+    {
+        return [
+            ScheduleEnum::FULL_DAY->value => Lang::get('resume.schedule.full_day'),
+            ScheduleEnum::SHIFT->value => Lang::get('resume.schedule.shift'),
+            ScheduleEnum::FLEXIBLE->value => Lang::get('resume.schedule.flexible'),
+            ScheduleEnum::REMOTE->value => Lang::get('resume.schedule.remote'),
+        ];
+    }
 }

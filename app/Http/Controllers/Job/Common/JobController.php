@@ -6,18 +6,26 @@ use App\Components\Employer\Job\DTO\PaginateFiltersDto;
 use App\Components\Employer\Job\Enums\JobEducationEnum;
 use App\Components\Employer\Job\Enums\JobExperienceEnum;
 use App\Components\Employer\Job\Repositories\JobRepository;
+use App\Components\Employer\Sector\Repositories\SectorRepository;
 use App\Components\Resume\Enums\EmploymentEnum;
 use App\Components\Resume\Enums\ScheduleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Job\Common\JobIndexRequest;
+use App\Models\City;
 use App\Models\Employer;
 use App\Models\EmployerJob;
+use App\Models\Skill;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
-    public function index(JobIndexRequest $request, Employer $employer, JobRepository $repository): View
+    public function index(
+        JobIndexRequest $request,
+        Employer $employer,
+        JobRepository $repository,
+        SectorRepository $sectorRepository,
+    ): View
     {
         $jobs = $repository->setEmployer($employer)->paginate(
             new PaginateFiltersDto(
@@ -37,7 +45,17 @@ class JobController extends Controller
             $request->integer('per_page', 10)
         );
 
-        return view('employers.jobs.index', ['jobs' => $jobs]);
+        return view('employers.jobs.index', [
+            'jobs' => $jobs,
+            'sectors' => $sectorRepository->all(),
+            'cities' => City::query()->get()->toArray(),
+            'education' => JobEducationEnum::toArray(),
+            'employment' => EmploymentEnum::toArray(),
+            'experience' => JobExperienceEnum::toArray(),
+            'schedule' => ScheduleEnum::toArray(),
+            'skills' => Skill::query()->get()->toArray(),
+            'data' => $request->toArray(),
+        ]);
     }
 
     public function show(Request $request, Employer $employer, EmployerJob $job): View

@@ -23,4 +23,13 @@ enum JobEducationEnum: int
             default => throw new InvalidArgumentException('Invalid education provided', Response::HTTP_INTERNAL_SERVER_ERROR),
         };
     }
+
+    public static function toArray(): array
+    {
+        return [
+            JobEducationEnum::NOT_REQUIRED_OR_NOT_SPECIFIED->value => Lang::get('job.education.not_required_or_not_specified'),
+            JobEducationEnum::SPECIAL_SECONDARY->value => Lang::get('job.education.special_secondary'),
+            JobEducationEnum::HIGHER->value => Lang::get('job.education.higher'),
+        ];
+    }
 }

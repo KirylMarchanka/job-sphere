@@ -23,4 +23,13 @@ enum EmploymentEnum: int
             default => throw new InvalidArgumentException('Invalid employment provided', Response::HTTP_INTERNAL_SERVER_ERROR),
         };
     }
+
+    public static function toArray(): array
+    {
+        return [
+            EmploymentEnum::FULL_TIME->value => Lang::get('resume.employments.full_time'),
+            EmploymentEnum::PART_TIME->value => Lang::get('resume.employments.part_time'),
+            EmploymentEnum::INTERNSHIP->value => Lang::get('resume.employments.internship'),
+        ];
+    }
 }

@@ -25,4 +25,7 @@ Route::name('verification.')->group(function () {
     Route::get('/verify', [VerifyEmailController::class, 'verify'])->name('verify');
 });
 
-Route::get('/{employer}', [EmployerController::class, 'show'])->name('show');
+Route::controller(EmployerController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('/{employer}', 'show')->name('show');
+});

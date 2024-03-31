@@ -17,7 +17,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">Компании</a>
+                <a class="nav-link" href="{{ route('employers.index') }}">Компании</a>
             </li>
         </ul>
 

@@ -11,7 +11,7 @@
     <h3 class="my-3">Работодатели</h3>
     <div class="row">
         @foreach($employers as $employer)
-            @include('components.employers.card', ['employer' => $employer])
+            @include('components.employers.preview-card', ['employer' => $employer])
         @endforeach
     </div>
 @endsection

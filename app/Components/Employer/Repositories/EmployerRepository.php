@@ -17,9 +17,9 @@ class EmployerRepository
         $this->filterApplyer = $filterApplyer;
     }
 
-    public function all(?string $name = null, ?int $sector = null, ?int $perPage = null, bool $randomSort = false): LengthAwarePaginator
+    public function all(?string $name = null, ?int $sector = null, ?int $perPage = null): LengthAwarePaginator
     {
-        $builder = Employer::query()->with(['sector.parent']);
+        $builder = Employer::query()->with(['sector.parent'])->withCount('jobs');
 
         return $this->filterApplyer->apply($builder, ['name' => $name, 'sector' => $sector])->paginate(perPage: $perPage);
     }

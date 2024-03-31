@@ -3,19 +3,21 @@
 namespace App\Http\Controllers\Employer\Common;
 
 use App\Components\Employer\Repositories\EmployerRepository;
-use App\Components\Responser\Facades\Responser;
+use App\Components\Employer\Sector\Repositories\SectorRepository;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Employer\Common\IndexEmployerRequest;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\JsonResponse;
 
 class EmployerController extends Controller
 {
-    public function index(IndexEmployerRequest $request, EmployerRepository $repository): JsonResponse
+    public function index(IndexEmployerRequest $request, EmployerRepository $employerRepository, SectorRepository $sectorRepository): View
     {
-        return Responser::wrap(false)
-            ->setData($repository->all($request->input('name'), $request->input('sector')))
-            ->success();
+        return view('employers.index', [
+            'employers' => $employerRepository->all($request->input('name'), $request->input('sector')),
+            'sectors' => $sectorRepository->all(),
+            'name' => $request->input('name'),
+            'sector' => $request->input('sector'),
+        ]);
     }
 
     public function show(EmployerRepository $repository, int $employer): View

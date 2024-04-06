@@ -26,10 +26,21 @@
         <div class="card-footer">
             <a href="{{ route('employers.jobs.show', ['employer' => $job['employer']['id'], 'job' => $job['id']]) }}" class="btn btn-secondary">Детали</a>
             <a href="{{ route('employers.jobs.edit', ['job' => $job['id']]) }}" class="btn btn-primary">Обновить</a>
+
             @if($job['is_archived'])
-                <a href="" class="btn btn-success">Опубликовать</a>
+                <form action="{{ route('employers.jobs.archives.unarchive', ['job' => $job['id']]) }}" method="POST" class="d-inline">
+                    @csrf
+                    @method('PUT')
+
+                    <button class="d-inline-block btn btn-success">Опубликовать</button>
+                </form>
             @else
-                <a href="" class="btn btn-danger">В архив</a>
+                <form action="{{ route('employers.jobs.archives.archive', ['job' => $job['id']]) }}" method="POST" class="d-inline">
+                    @csrf
+                    @method('PUT')
+
+                    <button class="d-inline-block btn btn-success">В архив</button>
+                </form>
             @endif
         </div>
     </div>

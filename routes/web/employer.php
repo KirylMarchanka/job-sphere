@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\Employer\LogoutController;
 use App\Http\Controllers\Auth\Employer\RegisterController;
 use App\Http\Controllers\Auth\Employer\VerifyEmailController;
 use App\Http\Controllers\Employer\Common\EmployerController;
+use App\Http\Controllers\Job\Employer\JobArchiveStateController;
 use App\Http\Controllers\Job\Employer\JobController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,12 +29,20 @@ Route::name('verification.')->group(function () {
 
 Route::prefix('/jobs')->name('jobs.')->middleware('auth:web.employers')->group(function () {
     Route::controller(JobController::class)->group(function () {
-        Route::get('/', [JobController::class, 'index'])->name('index');
-        Route::get('/create', [JobController::class, 'create'])->name('create');
-        Route::post('/', [JobController::class, 'store'])->name('store');
-        Route::get('/{job}', [JobController::class, 'edit'])->name('edit');
-        Route::put('/{job}', [JobController::class, 'update'])->name('update');
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{job}', 'edit')->name('edit');
+        Route::put('/{job}', 'update')->name('update');
     });
+
+    Route::prefix('/{job}')
+        ->name('archives.')
+        ->controller(JobArchiveStateController::class)
+        ->group(function () {
+            Route::put('/archive', 'archive')->name('archive');
+            Route::put('/unarchive', 'unarchive')->name('unarchive');
+        });
 });
 
 Route::controller(EmployerController::class)->group(function () {

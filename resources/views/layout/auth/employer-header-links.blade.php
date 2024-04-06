@@ -1,5 +1,8 @@
 <li class="nav-item">
-    <a class="nav-link" href="#">Профиль</a>
+    <a class="nav-link" href="#">Мои вакансии</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{{ route('employers.jobs.create') }}">Новая вакансия</a>
 </li>
 <li class="nav-item">
     <form method="POST" action="{{ route('employers.auth.logout') }}">

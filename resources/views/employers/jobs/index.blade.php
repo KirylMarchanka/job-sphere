@@ -8,7 +8,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-3 mt-3">
-            @include('components.jobs.index-search', ['data' => $data, 'sectors' => $sectors, 'cities' => $cities, 'education' => $education, 'experience' => $experience, 'schedule' => $schedule, 'skills' => $skills])
+            @include('components.jobs.index-search', ['data' => $data, 'sectors' => $sectors, 'cities' => $cities, 'education' => $education, 'experience' => $experience, 'schedule' => $schedule, 'employment' => $employment, 'skills' => $skills])
         </div>
 
         <div class="col-md-9">

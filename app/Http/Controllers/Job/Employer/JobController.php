@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Job\Employer;
 
+use App\Components\City\Repositories\CityRepository;
 use App\Components\Employer\Job\DTO\StoreJobDto;
 use App\Components\Employer\Job\DTO\UpdateJobDto;
 use App\Components\Employer\Job\Enums\JobEducationEnum;
@@ -10,17 +11,32 @@ use App\Components\Employer\Job\Repositories\JobRepository;
 use App\Components\Responser\Facades\Responser;
 use App\Components\Resume\Enums\EmploymentEnum;
 use App\Components\Resume\Enums\ScheduleEnum;
+use App\Components\Skill\Repositories\SkillRepository;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Job\JobStoreRequest;
 use App\Http\Requests\Job\JobUpdateRequest;
 use App\Models\EmployerJob;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class JobController extends Controller
 {
-    public function store(JobStoreRequest $request, JobRepository $repository): JsonResponse
+    public function create(SkillRepository $skillRepository, CityRepository $cityRepository): View
     {
-        $job = $repository->setEmployer($request->user('api.employers'))->store(new StoreJobDto(
+        return view('employers.jobs.create', [
+            'experience' => JobExperienceEnum::toArray(),
+            'education' => JobEducationEnum::toArray(),
+            'schedule' => ScheduleEnum::toArray(),
+            'employment' => EmploymentEnum::toArray(),
+            'skills' => $skillRepository->all(),
+            'cities' => $cityRepository->all(),
+        ]);
+    }
+
+    public function store(JobStoreRequest $request, JobRepository $repository): RedirectResponse
+    {
+        $job = $repository->setEmployer($request->user('web.employers'))->store(new StoreJobDto(
             $request->input('title'),
             $request->input('salary_from'),
             $request->input('salary_to'),
@@ -35,7 +51,7 @@ class JobController extends Controller
             $request->input('skills')
         ));
 
-        return Responser::setData(['job' => $job->getKey()])->success();
+        return redirect()->route('employers.jobs.show', ['employer' => $request->user('web.employers'), 'job' => $job->getKey()]);
     }
 
     public function update(JobUpdateRequest $request, EmployerJob $job, JobRepository $repository): JsonResponse

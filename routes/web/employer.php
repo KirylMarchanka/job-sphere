@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\Employer\LogoutController;
 use App\Http\Controllers\Auth\Employer\RegisterController;
 use App\Http\Controllers\Auth\Employer\VerifyEmailController;
 use App\Http\Controllers\Employer\Common\EmployerController;
+use App\Http\Controllers\Job\Employer\JobController;
 use Illuminate\Support\Facades\Route;
 
 Route::name('auth.')->group(function () {
@@ -23,6 +24,13 @@ Route::name('auth.')->group(function () {
 
 Route::name('verification.')->group(function () {
     Route::get('/verify', [VerifyEmailController::class, 'verify'])->name('verify');
+});
+
+Route::prefix('/jobs')->name('jobs.')->middleware('auth:web.employers')->group(function () {
+    Route::controller(JobController::class)->group(function () {
+        Route::get('/', [JobController::class, 'create'])->name('create');
+        Route::post('/', [JobController::class, 'store'])->name('store');
+    });
 });
 
 Route::controller(EmployerController::class)->group(function () {

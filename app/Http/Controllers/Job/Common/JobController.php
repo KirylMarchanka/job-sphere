@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Job\Common;
 
+use App\Components\City\Repositories\CityRepository;
 use App\Components\Employer\Job\DTO\PaginateFiltersDto;
 use App\Components\Employer\Job\Enums\JobEducationEnum;
 use App\Components\Employer\Job\Enums\JobExperienceEnum;
@@ -9,6 +10,7 @@ use App\Components\Employer\Job\Repositories\JobRepository;
 use App\Components\Employer\Sector\Repositories\SectorRepository;
 use App\Components\Resume\Enums\EmploymentEnum;
 use App\Components\Resume\Enums\ScheduleEnum;
+use App\Components\Skill\Repositories\SkillRepository;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Job\Common\JobIndexRequest;
 use App\Models\City;
@@ -21,13 +23,15 @@ use Illuminate\Http\Request;
 class JobController extends Controller
 {
     public function index(
-        JobIndexRequest $request,
-        Employer $employer,
-        JobRepository $repository,
+        JobIndexRequest  $request,
+        Employer         $employer,
+        JobRepository    $jobRepository,
         SectorRepository $sectorRepository,
+        CityRepository   $cityRepository,
+        SkillRepository  $skillRepository,
     ): View
     {
-        $jobs = $repository->setEmployer($employer)->paginate(
+        $jobs = $jobRepository->setEmployer($employer)->paginate(
             new PaginateFiltersDto(
                 title: $request->input('title'),
                 isArchived: false,
@@ -48,12 +52,12 @@ class JobController extends Controller
         return view('employers.jobs.index', [
             'jobs' => $jobs,
             'sectors' => $sectorRepository->all(),
-            'cities' => City::query()->get()->toArray(),
+            'cities' => $cityRepository->all(),
             'education' => JobEducationEnum::toArray(),
             'employment' => EmploymentEnum::toArray(),
             'experience' => JobExperienceEnum::toArray(),
             'schedule' => ScheduleEnum::toArray(),
-            'skills' => Skill::query()->get()->toArray(),
+            'skills' => $skillRepository->all(),
             'data' => $request->toArray(),
         ]);
     }

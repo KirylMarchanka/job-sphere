@@ -22,7 +22,7 @@ class JobStoreRequest extends FormRequest
             'title' => 'required|string|max:255',
             'salary_from' => 'present|nullable|integer|numeric|min:1|lte:salary_to',
             'salary_to' => 'present|nullable|integer|numeric|min:1|gte:salary_from',
-            'salary_employer_paid_taxes' => 'required|boolean',
+            'salary_employer_paid_taxes' => 'sometimes|boolean',
             'experience' => ['present', 'nullable', Rule::enum(JobExperienceEnum::class)],
             'education' => ['present', 'nullable', Rule::enum(JobEducationEnum::class)],
             'schedule' => ['required', Rule::enum(ScheduleEnum::class)],

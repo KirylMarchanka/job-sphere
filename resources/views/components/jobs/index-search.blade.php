@@ -74,6 +74,17 @@
     </div>
 
     <div class="form-group">
+        <label for="employment">График работы:</label>
+        <select name="employment" id="employment" class="form-select my-1">
+            <option value="">Любой</option>
+            @foreach($employment as $value => $text)
+                <option  @selected($id == old('employment', $data['employment'] ?? -1))
+                    value="{{ $value }}">{{ $text }}</option>
+            @endforeach
+        </select>
+    </div>
+
+    <div class="form-group">
         <label for="skills">Навыки:</label>
         <select name="skills[]" id="skills" class="form-select" multiple aria-label="Skills">
             <option value="">Любые</option>

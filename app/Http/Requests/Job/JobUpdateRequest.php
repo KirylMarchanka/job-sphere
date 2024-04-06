@@ -13,7 +13,7 @@ class JobUpdateRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->route()->parameter('job')->getAttribute('employer_id') === $this->user('api.employers')->getKey();
+        return $this->route()->parameter('job')->getAttribute('employer_id') === $this->user('web.employers')->getKey();
     }
 
     public function rules(): array
@@ -22,7 +22,7 @@ class JobUpdateRequest extends FormRequest
             'title' => 'sometimes|string|max:255',
             'salary_from' => 'sometimes|nullable|integer|numeric|min:1|lte:salary_to',
             'salary_to' => 'sometimes|nullable|integer|numeric|min:1|gte:salary_from',
-            'salary_employer_paid_taxes' => 'sometimes|boolean',
+            'salary_employer_paid_taxes' => 'sometimes|nullable|accepted',
             'experience' => ['sometimes', 'nullable', Rule::enum(JobExperienceEnum::class)],
             'education' => ['sometimes', 'nullable', Rule::enum(JobEducationEnum::class)],
             'schedule' => ['sometimes', Rule::enum(ScheduleEnum::class)],

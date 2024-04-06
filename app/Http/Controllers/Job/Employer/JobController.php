@@ -10,16 +10,15 @@ use App\Components\Employer\Job\Enums\JobEducationEnum;
 use App\Components\Employer\Job\Enums\JobExperienceEnum;
 use App\Components\Employer\Job\Repositories\JobRepository;
 use App\Components\Employer\Sector\Repositories\SectorRepository;
-use App\Components\Responser\Facades\Responser;
 use App\Components\Resume\Enums\EmploymentEnum;
 use App\Components\Resume\Enums\ScheduleEnum;
 use App\Components\Skill\Repositories\SkillRepository;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Job\Common\JobIndexRequest;
+use App\Http\Requests\Job\JobEditRequest;
 use App\Http\Requests\Job\JobStoreRequest;
 use App\Http\Requests\Job\JobUpdateRequest;
 use App\Models\EmployerJob;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -95,9 +94,24 @@ class JobController extends Controller
         return redirect()->route('employers.jobs.show', ['employer' => $request->user('web.employers'), 'job' => $job->getKey()]);
     }
 
-    public function update(JobUpdateRequest $request, EmployerJob $job, JobRepository $repository): JsonResponse
+    public function edit(JobEditRequest $request, EmployerJob $job, SkillRepository $skillRepository, CityRepository $cityRepository): View
     {
-        $repository->setEmployer($request->user('api.employers'))->update($job, new UpdateJobDto(
+        $job->load('skills');
+
+        return view('employers.jobs.edit', [
+            'job' => $job,
+            'experience' => JobExperienceEnum::toArray(),
+            'education' => JobEducationEnum::toArray(),
+            'schedule' => ScheduleEnum::toArray(),
+            'employment' => EmploymentEnum::toArray(),
+            'skills' => $skillRepository->all(),
+            'cities' => $cityRepository->all(),
+        ]);
+    }
+
+    public function update(JobUpdateRequest $request, EmployerJob $job, JobRepository $repository): RedirectResponse
+    {
+        $repository->setEmployer($request->user('web.employers'))->update($job, new UpdateJobDto(
             $request->input('title', $job->getAttribute('title')),
             $request->whenHas('salary_from', fn(?int $salary) => $salary, fn() => $job->getAttribute('salary_from')),
             $request->whenHas('salary_to', fn(?int $salary) => $salary, fn() => $job->getAttribute('salary_to')),
@@ -124,6 +138,6 @@ class JobController extends Controller
             $request->whenHas('skills', fn(array $skills) => $skills, fn() => $job->load('skills')->getRelation('skills')->pluck('skill_id')->toArray()),
         ));
 
-        return Responser::wrap(false)->setData(['success' => true])->success();
+        return redirect()->route('employers.jobs.show', ['employer' => $request->user('web.employers'), 'job' => $job->getKey()]);
     }
 }

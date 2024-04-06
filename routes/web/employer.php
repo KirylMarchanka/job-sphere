@@ -31,6 +31,8 @@ Route::prefix('/jobs')->name('jobs.')->middleware('auth:web.employers')->group(f
         Route::get('/', [JobController::class, 'index'])->name('index');
         Route::get('/create', [JobController::class, 'create'])->name('create');
         Route::post('/', [JobController::class, 'store'])->name('store');
+        Route::get('/{job}', [JobController::class, 'edit'])->name('edit');
+        Route::put('/{job}', [JobController::class, 'update'])->name('update');
     });
 });
 

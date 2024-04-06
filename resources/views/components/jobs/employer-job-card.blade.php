@@ -25,7 +25,7 @@
         </div>
         <div class="card-footer">
             <a href="{{ route('employers.jobs.show', ['employer' => $job['employer']['id'], 'job' => $job['id']]) }}" class="btn btn-secondary">Детали</a>
-            <a href="" class="btn btn-primary">Обновить</a>
+            <a href="{{ route('employers.jobs.edit', ['job' => $job['id']]) }}" class="btn btn-primary">Обновить</a>
             @if($job['is_archived'])
                 <a href="" class="btn btn-success">Опубликовать</a>
             @else

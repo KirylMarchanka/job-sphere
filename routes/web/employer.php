@@ -28,7 +28,8 @@ Route::name('verification.')->group(function () {
 
 Route::prefix('/jobs')->name('jobs.')->middleware('auth:web.employers')->group(function () {
     Route::controller(JobController::class)->group(function () {
-        Route::get('/', [JobController::class, 'create'])->name('create');
+        Route::get('/', [JobController::class, 'index'])->name('index');
+        Route::get('/create', [JobController::class, 'create'])->name('create');
         Route::post('/', [JobController::class, 'store'])->name('store');
     });
 });

@@ -12,10 +12,10 @@
         </div>
 
         <div class="col-md-9">
-            <h1 class="display-4 my-3">Ваши вакансии</h1>
+            <h1 class="display-4 my-3">Доступные вакансии</h1>
             <div class="row">
                 @forelse($jobs as $job)
-                    @include('components.jobs.card', ['job' => $job->toArray()])
+                    @include('components.jobs.employer-job-card', ['job' => $job->toArray()])
                 @empty
                     <p>Не найдено вакансий, соответствующих вашим критериям поиска.</p>
                 @endforelse

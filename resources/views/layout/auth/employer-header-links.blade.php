@@ -1,5 +1,5 @@
 <li class="nav-item">
-    <a class="nav-link" href="#">Мои вакансии</a>
+    <a class="nav-link" href="{{ route('employers.jobs.index') }}">Мои вакансии</a>
 </li>
 <li class="nav-item">
     <a class="nav-link" href="{{ route('employers.jobs.create') }}">Новая вакансия</a>

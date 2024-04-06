@@ -24,14 +24,13 @@ class JobController extends Controller
 {
     public function index(
         JobIndexRequest  $request,
-        Employer         $employer,
         JobRepository    $jobRepository,
         SectorRepository $sectorRepository,
         CityRepository   $cityRepository,
         SkillRepository  $skillRepository,
     ): View
     {
-        $jobs = $jobRepository->setEmployer($employer)->paginate(
+        $jobs = $jobRepository->paginate(
             new PaginateFiltersDto(
                 title: $request->input('title'),
                 isArchived: false,

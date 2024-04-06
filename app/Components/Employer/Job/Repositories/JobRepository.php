@@ -9,6 +9,7 @@ use App\Components\Employer\Job\Filters\JobFilterApplyer;
 use App\Models\Employer;
 use App\Models\EmployerJob;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class JobRepository
@@ -33,6 +34,7 @@ class JobRepository
             'id',
             'employer_id',
             'title',
+            'is_archived',
             'salary_from',
             'salary_to',
             'salary_employer_paid_taxes',
@@ -41,7 +43,9 @@ class JobRepository
             'employment',
             'schedule',
             'description',
-        ])->with(['employer:id,name', 'city.country', 'skills']);
+        ])->when(isset($this->employer), function (Builder $builder) {
+            return $builder->where('employer_id', $this->employer->getKey());
+        })->with(['employer:id,name', 'city.country', 'skills']);
 
         return $this->filterApplyer->apply($jobs, $filters->toArray())->paginate(perPage: $perPage, page: $page);
     }

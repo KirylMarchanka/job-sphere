@@ -12,7 +12,7 @@
         </div>
 
         <div class="col-md-9">
-            <h1 class="display-4 my-3">Ваши вакансии</h1>
+            <h1 class="display-4 my-3">Вакансии</h1>
             <div class="row">
                 @forelse($jobs as $job)
                     @include('components.jobs.card', ['job' => $job->toArray()])

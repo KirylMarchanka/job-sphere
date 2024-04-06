@@ -10,18 +10,23 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Profile\User\UpdateProfileRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    public function show(Request $request): JsonResponse
+    public function show(Request $request): View
     {
-        return Responser::setData($request->user()->toArray())->success();
+        return view('users.profile.show', [
+            'user' => $request->user('web.users'),
+        ]);
     }
 
-    public function update(UpdateProfileRequest $request, ProfileUpdater $profileUpdater): JsonResponse
+    public function update(UpdateProfileRequest $request, ProfileUpdater $profileUpdater): RedirectResponse
     {
         /** @var User $user */
         $user = $request->user();
@@ -32,13 +37,14 @@ class ProfileController extends Controller
             $request->whenHas('password', fn(string $password) => Hash::make($password), fn() => null)
         )));
 
-        return Responser::setData(['message' => Lang::get('profile.user.updated')])->success();
+        return redirect()->route('users.profile.show');
     }
 
-    public function destroy(Request $request, UserRepository $repository): JsonResponse
+    public function destroy(Request $request, UserRepository $repository): RedirectResponse
     {
         $repository->delete($request->user()->getAttribute('id'));
+        Auth::guard('web.users')->logout();
 
-        return Responser::setData(['message' => Lang::get('profile.user.deleted')])->success();
+        return redirect()->route('index');
     }
 }

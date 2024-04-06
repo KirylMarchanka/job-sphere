@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\User\RegisterController;
 use App\Http\Controllers\Auth\User\VerifyEmailController;
 use App\Http\Controllers\Job\Common\JobController;
 use App\Http\Controllers\Main\MainPageController;
+use App\Http\Controllers\Profile\User\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,6 +39,12 @@ Route::prefix('/users')->name('users.')->group(function () {
 
     Route::name('verification.')->group(function () {
         Route::get('/verify', [VerifyEmailController::class, 'verify'])->name('verify');
+    });
+
+    Route::prefix('/profile')->name('profile.')->controller(ProfileController::class)->middleware('auth:web.users')->group(function () {
+        Route::get('/', 'show')->name('show');
+        Route::put('/', 'update')->name('update');
+        Route::delete('/', 'destroy')->name('delete');
     });
 });
 

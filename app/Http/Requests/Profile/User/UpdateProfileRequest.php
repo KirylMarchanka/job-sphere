@@ -27,8 +27,8 @@ class UpdateProfileRequest extends FormRequest
                 'max:30',
                 Rule::unique('users', 'mobile_number')->ignoreModel(Auth::user())
             ],
-            'old_password' => 'sometimes|current_password:api',
-            'password' => ['required_with:old_password', 'confirmed', Password::default()],
+            'old_password' => 'sometimes|nullable|current_password:web.users',
+            'password' => ['nullable', 'required_with:old_password', 'confirmed', Password::default()],
         ];
     }
 

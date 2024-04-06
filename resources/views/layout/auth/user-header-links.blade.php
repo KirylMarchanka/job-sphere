@@ -1,5 +1,5 @@
 <li class="nav-item">
-    <a class="nav-link" href="#">Профиль</a>
+    <a class="nav-link" href="{{ route('users.profile.show') }}">Профиль</a>
 </li>
 <li class="nav-item">
     <form method="POST" action="{{ route('users.auth.logout') }}">

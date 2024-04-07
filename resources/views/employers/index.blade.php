@@ -18,6 +18,8 @@
             @endforelse
         </div>
 
+        {{ $employers->links() }}
+
     </div>
 
 @endsection

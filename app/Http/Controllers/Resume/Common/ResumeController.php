@@ -8,15 +8,18 @@ use App\Http\Controllers\Controller;
 use App\Models\Resume;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ResumeController extends Controller
 {
-    public function index(Request $request, ResumeRepository $repository): JsonResponse
+    public function index(Request $request, ResumeRepository $repository): View
     {
-        return Responser::wrap(false)->setData($repository->paginate($request->all()))->success();
+        return view('resumes.index', [
+            'data' => $repository->paginate($request->all()),
+        ]);
     }
 
-    public function show(Resume $resume): JsonResponse
+    public function show(Resume $resume): View
     {
         $resume->load([
             'specializations:id,name',
@@ -33,7 +36,9 @@ class ResumeController extends Controller
             'education.educationalInstitution.city',
             'education.educationalInstitution.city.country',
         ])->append('total_work_experience');
-
-        return Responser::setData($resume->toArray())->success();
+//dd($resume->toArray());
+        return view('resumes.show', [
+            'resume' => $resume->toArray(),
+        ]);
     }
 }

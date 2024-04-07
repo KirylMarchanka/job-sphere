@@ -14,6 +14,7 @@ use App\Components\Resume\DTOs\ResumeWorkExperienceDto;
 use App\Models\Resume;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 
 class ResumeRepository
@@ -26,7 +27,7 @@ class ResumeRepository
         $this->contactPreferredValueChecker = $contactPreferredValueChecker;
     }
 
-    public function paginate(array $data): array
+    public function paginate(array $data): LengthAwarePaginator
     {
         return Resume::query() //@todo Вынести фильтры в классы
             ->select(['id', 'title', 'status', 'salary', 'employment', 'schedule'])
@@ -86,8 +87,7 @@ class ResumeRepository
             })
             ->orderByDesc('updated_at')
             ->paginate()
-            ->through(fn(Resume $resume) => $resume->append('total_work_experience')->makeHidden('workExperiences')->toArray())
-            ->toArray();
+            ->through(fn(Resume $resume) => $resume->append('total_work_experience')->makeHidden('workExperiences')->toArray());
     }
 
     //@todo Статистика? Кол-во просмотров, показов, откликов

@@ -34,6 +34,6 @@ return [
     ],
 
     'work_exp' => [
-        'total' => 'Опыт работы :years года и :months месяцев',
+        'total' => ':years года и :months месяцев',
     ],
 ];

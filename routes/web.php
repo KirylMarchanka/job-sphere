@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\User\VerifyEmailController;
 use App\Http\Controllers\Job\Common\JobController;
 use App\Http\Controllers\Main\MainPageController;
 use App\Http\Controllers\Profile\User\ProfileController;
+use App\Http\Controllers\Resume\Common\ResumeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -56,4 +57,9 @@ Route::prefix('/employers')->name('employers.')->group(function () {
     Route::prefix('/{employer}/jobs')->name('jobs.')->group(function () {
         Route::get('/{job}', [JobController::class, 'show'])->name('show');
     });
+});
+
+Route::prefix('/resumes')->name('resumes.')->group(function () {
+    Route::get('/', [ResumeController::class, 'index'])->name('index');
+    Route::get('/{resume}', [ResumeController::class, 'show'])->name('show');
 });

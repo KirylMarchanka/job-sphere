@@ -19,6 +19,10 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('employers.index') }}">Компании</a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('resumes.index') }}">Резюме</a>
+            </li>
         </ul>
 
         <ul class="navbar-nav mb-2 mb-lg-0">

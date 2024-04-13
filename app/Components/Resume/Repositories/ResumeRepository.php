@@ -29,7 +29,7 @@ class ResumeRepository
 
     public function paginate(array $data): LengthAwarePaginator
     {
-        return Resume::query() //@todo Вынести фильтры в классы
+        return Resume::query()
             ->select(['id', 'title', 'status', 'salary', 'employment', 'schedule'])
             ->with('workExperiences')
             ->when(isset($data['title']), function (Builder $builder) use ($data) {
@@ -60,12 +60,12 @@ class ResumeRepository
                     return $builder->whereIn('specialization_id', $data['specializations']);
                 });
             })
-            ->when(isset($data['skills']), function (Builder $builder) use ($data) {
+            ->when(!empty($data['skills']), function (Builder $builder) use ($data) {
                 return $builder->whereHas('skills', function (Builder $builder) use ($data) {
                     return $builder->whereIn('skill_id', $data['skills']);
                 });
             })
-            ->when(isset($data['city']), function (Builder $builder) use ($data) {
+            ->when(!empty($data['city']), function (Builder $builder) use ($data) {
                 return $builder->whereHas('personalInformation', function (Builder $builder) use ($data) {
                     return $builder->whereIn('city_id', $data['city']);
                 });

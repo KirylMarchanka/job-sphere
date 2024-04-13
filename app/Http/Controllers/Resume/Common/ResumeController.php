@@ -2,8 +2,15 @@
 
 namespace App\Http\Controllers\Resume\Common;
 
+use App\Components\City\Repositories\CityRepository;
+use App\Components\Employer\Job\Enums\JobEducationEnum;
+use App\Components\Employer\Job\Enums\JobExperienceEnum;
+use App\Components\Employer\Sector\Repositories\SectorRepository;
 use App\Components\Responser\Facades\Responser;
+use App\Components\Resume\Enums\EmploymentEnum;
+use App\Components\Resume\Enums\ScheduleEnum;
 use App\Components\Resume\Repositories\ResumeRepository;
+use App\Components\Skill\Repositories\SkillRepository;
 use App\Http\Controllers\Controller;
 use App\Models\Resume;
 use Illuminate\Http\JsonResponse;
@@ -12,10 +19,22 @@ use Illuminate\View\View;
 
 class ResumeController extends Controller
 {
-    public function index(Request $request, ResumeRepository $repository): View
+    public function index(
+        Request $request,
+        ResumeRepository $repository,
+        SectorRepository $sectorRepository,
+        CityRepository $cityRepository,
+        SkillRepository $skillRepository,
+    ): View
     {
         return view('resumes.index', [
-            'data' => $repository->paginate($request->all()),
+            'resumes' => $repository->paginate($request->all()),
+            'cities' => $cityRepository->all(),
+            'education' => JobEducationEnum::toArray(),
+            'employment' => EmploymentEnum::toArray(),
+            'schedule' => ScheduleEnum::toArray(),
+            'skills' => $skillRepository->all(),
+            'data' => $request->toArray(),
         ]);
     }
 
@@ -36,7 +55,7 @@ class ResumeController extends Controller
             'education.educationalInstitution.city',
             'education.educationalInstitution.city.country',
         ])->append('total_work_experience');
-//dd($resume->toArray());
+
         return view('resumes.show', [
             'resume' => $resume->toArray(),
         ]);

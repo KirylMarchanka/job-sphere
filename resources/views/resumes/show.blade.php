@@ -129,7 +129,7 @@
                         <h5 class="card-title">{{ $experience['position'] }}</h5>
                         <p class="card-text">{{ $experience['description'] }}</p>
                         <p><strong>Компания:</strong> {{ $experience['company_name'] }}</p>
-                        <a href="{{ $experience['site_url'] ?? '#' }}"><strong>Сайт компании:</strong> {{ $experience['site_url'] ?? '-' }}</a>
+                        <strong>Сайт компании:</strong> <a href="{{ $experience['site_url'] ?? '#' }}">{{ $experience['site_url'] ?? '-' }}</a>
                         <p><strong>Город:</strong> {{ $experience['city']['city_with_country'] }}</p>
                         <p><strong>Начало работы:</strong> {{ $experience['from'] }}</p>
                         <p><strong>Окончание:</strong> {{ $experience['to'] ?? 'Present' }}</p>

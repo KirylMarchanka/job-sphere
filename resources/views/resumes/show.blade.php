@@ -71,6 +71,11 @@
                     <a href="tel:{{ $resume['contact']['mobile_number'] }}">{{ $resume['contact']['mobile_number'] }}</a>
                 </div>
 
+                <div class="col-sm-3">
+                    <p class="lead">Почта:</p>
+                    <a href="mailto:{{ $resume['contact']['email'] }}">{{ $resume['contact']['email'] }}</a>
+                </div>
+
                 @if(!empty($resume['contact']['other_sources']['linkedin']))
                     <div class="col-sm-3">
                         <p class="lead">LinkedIn:</p>

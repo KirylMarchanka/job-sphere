@@ -8,14 +8,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Resume;
 use App\Models\ResumeEducation;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class ResumeEducationController extends Controller
 {
-    public function delete(Resume $resume, ResumeEducation $education, ResumeEducationRepository $repository): JsonResponse
+    public function delete(Resume $resume, ResumeEducation $education, ResumeEducationRepository $repository): RedirectResponse
     {
         $repository->setResume($resume)->delete($education->getKey());
 
-        return Responser::setHttpCode(Response::HTTP_NO_CONTENT)->success();
+        return redirect()->route('users.resumes.show', ['resume' => $resume->getKey()]);
     }
 }

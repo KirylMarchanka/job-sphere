@@ -4,16 +4,13 @@ namespace App\Http\Controllers\Resume\Common;
 
 use App\Components\City\Repositories\CityRepository;
 use App\Components\Employer\Job\Enums\JobEducationEnum;
-use App\Components\Employer\Job\Enums\JobExperienceEnum;
 use App\Components\Employer\Sector\Repositories\SectorRepository;
-use App\Components\Responser\Facades\Responser;
 use App\Components\Resume\Enums\EmploymentEnum;
 use App\Components\Resume\Enums\ScheduleEnum;
 use App\Components\Resume\Repositories\ResumeRepository;
 use App\Components\Skill\Repositories\SkillRepository;
 use App\Http\Controllers\Controller;
 use App\Models\Resume;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -22,7 +19,6 @@ class ResumeController extends Controller
     public function index(
         Request $request,
         ResumeRepository $repository,
-        SectorRepository $sectorRepository,
         CityRepository $cityRepository,
         SkillRepository $skillRepository,
     ): View

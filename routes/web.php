@@ -8,7 +8,9 @@ use App\Http\Controllers\Job\Common\JobController;
 use App\Http\Controllers\Main\MainPageController;
 use App\Http\Controllers\Profile\User\ProfileController;
 use App\Http\Controllers\Resume\Common\ResumeController;
+use App\Http\Controllers\Resume\Education\User\ResumeEducationController;
 use App\Http\Controllers\Resume\User\ResumeController as UserResumeController;
+use App\Http\Controllers\Resume\WorkExperience\User\ResumeWorkExperienceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -51,14 +53,30 @@ Route::prefix('/users')->name('users.')->group(function () {
 
     Route::prefix('/resumes')
         ->name('resumes.')
-        ->controller(UserResumeController::class)
         ->middleware('auth:web.users')
         ->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::get('/{resume}', 'show')->name('show');
-            Route::get('/create', 'create')->name('create');
-            Route::put('/{resume}', 'update')->name('update');
-            Route::delete('/{resume}', 'delete')->name('delete');
+            Route::controller(UserResumeController::class)
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/create', 'create')->name('create');
+                    Route::get('/{resume}', 'show')->name('show');
+                    Route::put('/{resume}', 'update')->name('update');
+                    Route::delete('/{resume}', 'delete')->name('delete');
+                });
+
+            Route::prefix('/{resume}/work-experiences')
+                ->name('work-experiences.')
+                ->controller(ResumeWorkExperienceController::class)
+                ->group(function () {
+                    Route::delete('/{workExperience}', 'delete')->name('delete');
+                });
+
+            Route::prefix('/{resume}/educations')
+                ->name('educations.')
+                ->controller(ResumeEducationController::class)
+                ->group(function () {
+                    Route::delete('/{education}', 'delete')->name('delete');
+                });
         });
 });
 

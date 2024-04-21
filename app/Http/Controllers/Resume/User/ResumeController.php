@@ -121,6 +121,7 @@ class ResumeController extends Controller
 
     public function delete(DeleteResumeRequest $request, Resume $resume, ResumeRepository $repository): RedirectResponse
     {
+        dd($resume, $request->method());
         $repository->setUser($request->user('web.users'))->delete($resume->getKey());
 
         return redirect()->route('users.resumes.index');

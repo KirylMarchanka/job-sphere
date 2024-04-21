@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Resume;
 use App\Models\ResumeWorkExperience;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class ResumeWorkExperienceController extends Controller
@@ -16,10 +17,10 @@ class ResumeWorkExperienceController extends Controller
         Resume $resume,
         ResumeWorkExperience $workExperience,
         ResumeWorkExperienceRepository $repository
-    ): JsonResponse
+    ): RedirectResponse
     {
         $repository->setResume($resume)->delete($workExperience->getKey());
 
-        return Responser::setHttpCode(Response::HTTP_NO_CONTENT)->success();
+        return redirect()->route('users.resumes.show', ['resume' => $resume->getKey()]);
     }
 }

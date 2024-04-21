@@ -75,7 +75,11 @@ Route::prefix('/users')->name('users.')->group(function () {
                 ->name('educations.')
                 ->controller(ResumeEducationController::class)
                 ->group(function () {
+                    Route::get('/create', 'create')->name('create');
+                    Route::post('/', 'store')->name('store');
+                    Route::get('/{education}/edit', 'edit')->name('edit');
                     Route::delete('/{education}', 'delete')->name('delete');
+                    Route::put('/{education}', 'update')->name('update');
                 });
         });
 });

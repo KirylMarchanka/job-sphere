@@ -29,6 +29,7 @@ use App\Http\Requests\Resume\User\StoreResumeRequest;
 use App\Http\Requests\Resume\User\UpdateResumeRequest;
 use App\Models\Resume;
 use App\Models\ResumeContact;
+use App\Rules\EnsureThatEntityLimitIsNotReached;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -43,15 +44,20 @@ class ResumeController extends Controller
     }
 
     public function show(
-        Request $request,
-        string $resume,
-        ResumeRepository $resumeRepository,
-        CityRepository $cityRepository,
-        SkillRepository $skillRepository,
+        Request                  $request,
+        string                   $resume,
+        ResumeRepository         $resumeRepository,
+        CityRepository           $cityRepository,
+        SkillRepository          $skillRepository,
         SpecializationRepository $specializationRepository,
     ): View
     {
         $resume = $resumeRepository->setUser($request->user())->find($resume);
+        $resume->setAttribute('reached_limits', [
+            'education' => $resume->getRelation('education')->count() >= EnsureThatEntityLimitIsNotReached::DEFAULT_LIMIT,
+            'work_experience' => $resume->getRelation('workExperiences')->count() >= EnsureThatEntityLimitIsNotReached::WORK_EXPERIENCES_LIMIT,
+        ]);
+
         $resume->setRelation('contact', $this->getOtherSources($resume->getRelation('contact')));
 
         return view('users.resume.show', [

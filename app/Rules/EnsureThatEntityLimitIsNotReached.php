@@ -10,9 +10,9 @@ use Illuminate\Support\Str;
 
 class EnsureThatEntityLimitIsNotReached implements ValidationRule
 {
-    private const SKILLS_LIMIT = 25;
-    private const WORK_EXPERIENCES_LIMIT = 10;
-    private const DEFAULT_LIMIT = 5;
+    const SKILLS_LIMIT = 25;
+    const WORK_EXPERIENCES_LIMIT = 10;
+    const DEFAULT_LIMIT = 5;
 
     public function __construct(private readonly Resume $resume)
     {

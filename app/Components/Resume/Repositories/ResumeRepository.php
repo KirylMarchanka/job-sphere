@@ -140,13 +140,13 @@ class ResumeRepository
      * @return Resume
      */
     public function store(
-        ResumeDto $resume,
-        array $specializations,
-        array $skills,
-        ResumeContactDto $contact,
+        ResumeDto                    $resume,
+        array                        $specializations,
+        array                        $skills,
+        ResumeContactDto             $contact,
         ResumePersonalInformationDto $personalInformation,
-        array $education,
-        array $workExperience
+        array                        $education,
+        array                        $workExperience
     ): Resume
     {
         /** @var Resume $resumeModel */
@@ -188,13 +188,13 @@ class ResumeRepository
      */
     public function update(
         int                           $resumeId,
-        ResumeDto                     $resume,
-        ?array                        $specializations,
-        ?array                        $skills,
-        ?ResumeContactDto             $contact,
-        ?ResumePersonalInformationDto $personalInformation,
-        ?array                        $education,
-        ?array                        $workExperience,
+        ?ResumeDto                    $resume = null,
+        ?array                        $specializations = null,
+        ?array                        $skills = null,
+        ?ResumeContactDto             $contact = null,
+        ?ResumePersonalInformationDto $personalInformation = null,
+        ?array                        $education = null,
+        ?array                        $workExperience = null,
     ): void
     {
         /** @var Resume $resumeModel */
@@ -202,7 +202,9 @@ class ResumeRepository
             ->where('id', $resumeId)
             ->first();
 
-        $resumeModel->update($resume->toArray());
+        if (null !== $resume) {
+            $resumeModel->update($resume->toArray());
+        }
 
         if (null !== $specializations) {
             $resumeModel->specializations()->sync(array_map(fn(ResumeSpecializationDto $specialization) => $specialization->id, $specializations));

@@ -34,4 +34,18 @@ enum DegreeEnum: int
             default => throw new InvalidArgumentException('Invalid education provided', Response::HTTP_INTERNAL_SERVER_ERROR),
         };
     }
+
+    public static function toArray(): array
+    {
+        return [
+            DegreeEnum::SECONDARY->value => Lang::get('resume.education.secondary'),
+            DegreeEnum::SPECIAL_SECONDARY->value => Lang::get('resume.education.special_secondary'),
+            DegreeEnum::UNFINISHED_HIGHER->value => Lang::get('resume.education.unfinished_higher'),
+            DegreeEnum::HIGHER->value => Lang::get('resume.education.higher'),
+            DegreeEnum::BACHELOR->value => Lang::get('resume.education.bachelor'),
+            DegreeEnum::MASTER->value => Lang::get('resume.education.master'),
+            DegreeEnum::CANDIDATE->value => Lang::get('resume.education.candidate'),
+            DegreeEnum::DOCTOR->value => Lang::get('resume.education.doctor'),
+        ];
+    }
 }

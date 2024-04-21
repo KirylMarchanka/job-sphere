@@ -169,28 +169,28 @@
                             <input @class(["form-check-input"]) type="radio" name="contact[preferred_contact_source]"
                                    id="preferredContactSource-mobile"
                                    value="0" @checked($resume->contact->getRawOriginal('preferred_contact_source') == 0)>
-                            <label @class(["form-check-label"]) for="preferredContactSource">Номер телефона</label>
+                            <label @class(["form-check-label"]) for="preferredContactSource-mobile">Номер телефона</label>
                         </div>
 
                         <div @class(["form-check", "form-check-inline"])>
                             <input @class(["form-check-input"]) type="radio" name="contact[preferred_contact_source]"
                                    id="preferredContactSource-email"
                                    value="1" @checked($resume->contact->getRawOriginal('preferred_contact_source') == 1)>
-                            <label @class(["form-check-label"]) for="preferredContactSource">Почта</label>
+                            <label @class(["form-check-label"]) for="preferredContactSource-email">Почта</label>
                         </div>
 
                         <div @class(["form-check", "form-check-inline"])>
                             <input @class(["form-check-input"]) type="radio" name="contact[preferred_contact_source]"
                                    id="preferredContactSource-linkedin"
                                    value="2" @checked($resume->contact->getRawOriginal('preferred_contact_source') == 2)>
-                            <label @class(["form-check-label"]) for="preferredContactSource">LinkedIn</label>
+                            <label @class(["form-check-label"]) for="preferredContactSource-linkedin">LinkedIn</label>
                         </div>
 
                         <div @class(["form-check", "form-check-inline"])>
                             <input @class(["form-check-input"]) type="radio" name="contact[preferred_contact_source]"
                                    id="preferredContactSource-telegram"
                                    value="3" @checked($resume->contact->getRawOriginal('preferred_contact_source') == 3)>
-                            <label @class(["form-check-label"]) for="preferredContactSource">Telegram</label>
+                            <label @class(["form-check-label"]) for="preferredContactSource-telegram">Telegram</label>
                         </div>
 
                         @include('components.forms.error', ['errorKey' => 'contact[preferred_contact_source]'])
@@ -263,7 +263,10 @@
                         </div>
                     </div>
                 @endforeach
-                <a class="btn btn-primary mb-3" href="">Добавить опыт работы</a>
+
+                @if(!$resume->getAttribute('reached_limits')['work_experience'])
+                    <a class="btn btn-primary mb-3" href="">Добавить опыт работы</a>
+                @endif
 
                 <h1 class="display-5">Образование</h1>
 
@@ -278,7 +281,7 @@
                             </p>
 
                             <div class="d-flex justify-content-between">
-                                <a class="btn btn-primary">Редактировать</a>
+                                <a class="btn btn-primary" href="{{ route('users.resumes.educations.edit', ['resume' => $resume->getKey(), 'education' => $education->getKey()]) }}">Редактировать</a>
                                 <button type="submit" form="delete-education-{{ $education->id }}"
                                         class="btn btn-danger d-inline-block">Удалить
                                 </button>
@@ -288,7 +291,9 @@
                 @endforeach
 
                 <div class="d-flex align-baseline justify-content-between my-3">
-                    <a class="btn btn-primary me-3" href="">Добавить образование</a>
+                    @if(!$resume->getAttribute('reached_limits')['education'])
+                        <a class="btn btn-primary me-3" href="{{ route('users.resumes.educations.create', ['resume' => $resume->getKey()]) }}">Добавить образование</a>
+                    @endif
 
                     <button type="submit" form="resume-update" class="btn btn-primary">Обновить резюме</button>
                 </div>

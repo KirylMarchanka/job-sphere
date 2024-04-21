@@ -8,6 +8,7 @@ use App\Http\Controllers\Job\Common\JobController;
 use App\Http\Controllers\Main\MainPageController;
 use App\Http\Controllers\Profile\User\ProfileController;
 use App\Http\Controllers\Resume\Common\ResumeController;
+use App\Http\Controllers\Resume\User\ResumeController as UserResumeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -47,6 +48,17 @@ Route::prefix('/users')->name('users.')->group(function () {
         Route::put('/', 'update')->name('update');
         Route::delete('/', 'destroy')->name('delete');
     });
+
+    Route::prefix('/resumes')
+        ->name('resumes.')
+        ->controller(UserResumeController::class)
+        ->middleware('auth:web.users')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/{resume}', 'show')->name('show');
+            Route::get('/create', 'create')->name('create');
+            Route::put('/{resume}', 'update')->name('update');
+        });
 });
 
 Route::prefix('/jobs')->name('jobs.')->group(function () {

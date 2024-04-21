@@ -101,9 +101,9 @@ class ResumeRepository
             ->toArray();
     }
 
-    public function find(string $id): ?array
+    public function find(string $id): ?Resume
     {
-        return $this->user->resumes()->with([
+        $resume = $this->user->resumes()->with([
             'specializations:id,name',
             'contact',
             'skills:id,name',
@@ -117,7 +117,15 @@ class ResumeRepository
             'education.educationalInstitution',
             'education.educationalInstitution.city',
             'education.educationalInstitution.city.country',
-        ])->where('id', $id)->first()?->append(['totalWorkExperience'])->toArray();
+        ])->where('id', $id)->first();
+
+        if (null === $resume) {
+            return null;
+        }
+
+        $resume->append(['totalWorkExperience']);
+
+        return $resume;
     } // @todo Знание языков (?), Прикрепление фото (?)
 
     /**

@@ -35,6 +35,11 @@ class SpecializationRepository
             ->toArray();
     }
 
+    public function getChildren(): array
+    {
+        return $this->baseQuery(['*'])->whereNotNull('parent_id')->orderBy('name')->get()->toArray();
+    }
+
     private function baseQuery(array $select): Builder
     {
         return Specialization::query()->select($select);

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Resume\User;
 
-use App\Components\Responser\Facades\Responser;
+use App\Components\City\Repositories\CityRepository;
 use App\Components\Resume\DTOs\ResumeContactDto;
 use App\Components\Resume\DTOs\ResumeDto;
 use App\Components\Resume\DTOs\ResumeEducationDto;
@@ -21,39 +21,69 @@ use App\Components\Resume\Helpers\DtoFillers\ResumeSkillDtoFiller;
 use App\Components\Resume\Helpers\DtoFillers\ResumeSpecializationDtoFiller;
 use App\Components\Resume\Helpers\DtoFillers\ResumeWorkExperienceDtoFiller;
 use App\Components\Resume\Repositories\ResumeRepository;
+use App\Components\Resume\Specialization\Repositories\SpecializationRepository;
+use App\Components\Skill\Repositories\SkillRepository;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Resume\User\DeleteResumeRequest;
 use App\Http\Requests\Resume\User\StoreResumeRequest;
 use App\Http\Requests\Resume\User\UpdateResumeRequest;
 use App\Models\Resume;
-use Illuminate\Http\JsonResponse;
+use App\Models\ResumeContact;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Lang;
-use Symfony\Component\HttpFoundation\Response;
 
 class ResumeController extends Controller
 {
-    public function index(Request $request, ResumeRepository $repository): JsonResponse
+    public function index(Request $request, ResumeRepository $repository): View
     {
         $resumes = $repository->setUser($request->user())->all();
 
-        return empty($resumes)
-            ? Responser::setHttpCode(Response::HTTP_NOT_FOUND)->error(Lang::get('user.resumes.list_not_found'))
-            : Responser::setData($resumes)->success();
+        return view('users.resume.index', ['resumes' => $resumes]);
     }
 
-    public function show(Request $request, string $resume, ResumeRepository $repository): JsonResponse
+    public function show(
+        Request $request,
+        string $resume,
+        ResumeRepository $resumeRepository,
+        CityRepository $cityRepository,
+        SkillRepository $skillRepository,
+        SpecializationRepository $specializationRepository,
+    ): View
     {
-        $resume = $repository->setUser($request->user())->find($resume);
+        $resume = $resumeRepository->setUser($request->user())->find($resume);
+        $resume->setRelation('contact', $this->getOtherSources($resume->getRelation('contact')));
 
-        return null === $resume
-            ? Responser::setHttpCode(Response::HTTP_NOT_FOUND)->error(Lang::get('user.resumes.single_not_found'))
-            : Responser::setData($resume)->success();
+        return view('users.resume.show', [
+            'resume' => $resume,
+            'statuses' => StatusEnum::toArray(),
+            'cities' => $cityRepository->all(),
+            'employments' => EmploymentEnum::toArray(),
+            'schedules' => ScheduleEnum::toArray(),
+            'skills' => $skillRepository->all(),
+            'specializations' => $specializationRepository->getChildren(),
+        ]);
     }
 
-    public function store(StoreResumeRequest $request, ResumeRepository $repository): JsonResponse
+    private function getOtherSources(ResumeContact $contact): ResumeContact
     {
-        $repository->setUser($request->user())->store(
+        $otherSources = json_decode($contact->getRawOriginal('other_sources') ?? '', true);
+        if (null === $otherSources) {
+            return $contact->setAttribute('original_other_sources', [
+                'linkedin' => null,
+                'telegram' => null,
+            ]);
+        }
+
+        return $contact->setAttribute('original_other_sources', [
+            'linkedin' => $otherSources['linkedin'] ?? null,
+            'telegram' => $otherSources['telegram'] ?? null,
+        ]);
+    }
+
+    public function store(StoreResumeRequest $request, ResumeRepository $repository): RedirectResponse
+    {
+        $resume = $repository->setUser($request->user())->store(
             new ResumeDto(
                 $request->input('title'),
                 StatusEnum::from($request->integer('status')),
@@ -70,10 +100,10 @@ class ResumeController extends Controller
             $request->whenFilled('work_experiences', fn(array $workExperiences) => array_map(fn(array $workExperience) => new ResumeWorkExperienceDto(...$workExperience), $workExperiences), fn() => []),
         );
 
-        return Responser::setData(['success' => true])->setHttpCode(Response::HTTP_CREATED)->success();
+        return redirect()->route('users.resumes.show', ['resume' => $resume->getKey()]);
     }
 
-    public function update(UpdateResumeRequest $request, Resume $resume, ResumeRepository $repository): JsonResponse
+    public function update(UpdateResumeRequest $request, Resume $resume, ResumeRepository $repository): RedirectResponse
     {
         $repository->setUser($request->user())->update(
             $resume->getKey(),
@@ -86,13 +116,13 @@ class ResumeController extends Controller
             ResumeWorkExperienceDtoFiller::fill($resume, $request->input('work_experiences')),
         );
 
-        return Responser::setData(['success' => true])->setHttpCode(Response::HTTP_CREATED)->success();
+        return redirect()->route('users.resumes.index');
     }
 
-    public function delete(DeleteResumeRequest $request, Resume $resume, ResumeRepository $repository): JsonResponse
+    public function delete(DeleteResumeRequest $request, Resume $resume, ResumeRepository $repository): RedirectResponse
     {
-        $repository->setUser($request->user())->delete($resume->getKey());
+        $repository->setUser($request->user('web.users'))->delete($resume->getKey());
 
-        return Responser::setData(['success' => true])->success();
+        return redirect()->route('users.resumes.index');
     }
 }

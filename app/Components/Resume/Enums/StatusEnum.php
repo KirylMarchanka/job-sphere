@@ -27,4 +27,15 @@ enum StatusEnum: int
             default => throw new InvalidArgumentException('Invalid resume status provided', Response::HTTP_INTERNAL_SERVER_ERROR),
         };
     }
+
+    public static function toArray(): array
+    {
+        return [
+            StatusEnum::ACTIVE->value => Lang::get('resume.statuses.active'),
+            StatusEnum::OPEN_TO_OPPORTUNITIES->value => Lang::get('resume.statuses.open_to_opportunities'),
+            StatusEnum::THINKING_ABOUT_NEW_OFFER->value => Lang::get('resume.statuses.new_offer'),
+            StatusEnum::ACCEPTED_OFFER->value => Lang::get('resume.statuses.accepted_offer'),
+            StatusEnum::UNAVAILABLE->value => Lang::get('resume.statuses.unavailable'),
+        ];
+    }
 }

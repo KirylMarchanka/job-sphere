@@ -14,6 +14,7 @@ use App\Models\EducationalInstitution;
 use App\Models\Skill;
 use App\Rules\EnsureThatAllFieldsArePresented;
 use App\Rules\EnsureThatEntityLimitIsNotReached;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -44,15 +45,15 @@ class UpdateResumeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['sometimes', 'string', 'max:255'],
-            'status' => ['sometimes', 'integer', 'numeric', 'min:0', Rule::enum(StatusEnum::class)],
-            'salary' => ['sometimes', 'nullable', 'integer', 'numeric', 'min:1'],
-            'employment' => ['sometimes', 'integer', 'numeric', 'min:0', Rule::enum(EmploymentEnum::class)],
-            'schedule' => ['sometimes', 'integer', 'numeric', 'min:0', Rule::enum(ScheduleEnum::class)],
-            'description' => ['sometimes', 'nullable', 'string'],
+            'title' => ['required', 'string', 'max:255'],
+            'status' => ['required', 'integer', 'numeric', 'min:0', Rule::enum(StatusEnum::class)],
+            'salary' => ['present', 'nullable', 'integer', 'numeric', 'min:1'],
+            'employment' => ['required', 'integer', 'numeric', 'min:0', Rule::enum(EmploymentEnum::class)],
+            'schedule' => ['required', 'integer', 'numeric', 'min:0', Rule::enum(ScheduleEnum::class)],
+            'description' => ['present', 'nullable', 'string'],
 
             'specializations' => [
-                'sometimes',
+                'required',
                 'array',
                 'between:1,5',
                 new EnsureThatEntityLimitIsNotReached($this->route()->parameter('resume')),
@@ -60,35 +61,35 @@ class UpdateResumeRequest extends FormRequest
             'specializations.*' => ['distinct', 'integer', 'numeric', 'min:1', Rule::in($this->specializations)],
 
             'skills' => [
-                'sometimes',
+                'required',
                 'array',
                 'between:1,25',
                 new EnsureThatEntityLimitIsNotReached($this->route()->parameter('resume')),
             ],
             'skills.*' => ['distinct', 'integer', 'numeric', 'min:1', Rule::in($this->skills)],
 
-            'contact' => ['sometimes', 'array:mobile_number,comment,email,preferred_contact_source,other_sources'],
-            'contact.mobile_number' => ['sometimes', 'string', 'size:12'],
-            'contact.comment' => ['sometimes', 'nullable', 'string', 'max:255'],
-            'contact.email' => ['sometimes', 'nullable', 'email', 'max:254'],
+            'contact' => ['required', 'array:mobile_number,comment,email,preferred_contact_source,other_sources'],
+            'contact.mobile_number' => ['required', 'string', 'size:12'],
+            'contact.comment' => ['present', 'nullable', 'string', 'max:255'],
+            'contact.email' => ['present', 'nullable', 'email', 'max:254'],
             'contact.preferred_contact_source' => [
-                'sometimes',
+                'required',
                 'integer',
                 'numeric',
                 'min:0',
                 Rule::enum(ResumeContactPreferredContactEnum::class),
             ],
-            'contact.other_sources' => ['sometimes', 'array:linkedin,telegram', 'max:2'],
-            'contact.other_sources.linkedin' => ['sometimes', 'string', 'nullable'],
-            'contact.other_sources.telegram' => ['sometimes', 'string', 'nullable'],
+            'contact.other_sources' => ['required', 'array:linkedin,telegram', 'max:2'],
+            'contact.other_sources.linkedin' => ['present', 'string', 'nullable'],
+            'contact.other_sources.telegram' => ['present', 'string', 'nullable'],
 
-            'personal_information' => ['sometimes', 'array:name,surname,middle_name,birthdate,sex,city_id'],
-            'personal_information.name' => ['sometimes', 'string', 'between:2,255'],
-            'personal_information.surname' => ['sometimes', 'string', 'between:2,255'],
-            'personal_information.middle_name' => ['sometimes', 'nullable', 'string', 'between:2,255'],
-            'personal_information.birthdate' => ['sometimes', 'date_format:Y-m-d', 'before:-14 years'],
-            'personal_information.sex' => ['sometimes', 'string', 'size:1', Rule::enum(SexEnum::class)],
-            'personal_information.city_id' => ['sometimes', 'integer', 'numeric', 'min:1', Rule::in($this->cities)],
+            'personal_information' => ['required', 'array:name,surname,middle_name,birthdate,sex,city_id'],
+            'personal_information.name' => ['required', 'string', 'between:2,255'],
+            'personal_information.surname' => ['required', 'string', 'between:2,255'],
+            'personal_information.middle_name' => ['present', 'nullable', 'string', 'between:2,255'],
+            'personal_information.birthdate' => ['required', 'date_format:Y-m-d', 'before:-14 years'],
+            'personal_information.sex' => ['required', 'string', 'size:1', Rule::enum(SexEnum::class)],
+            'personal_information.city_id' => ['required', 'integer', 'numeric', 'min:1', Rule::in($this->cities)],
 
             'education' => [
                 'sometimes',

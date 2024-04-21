@@ -58,6 +58,7 @@ Route::prefix('/users')->name('users.')->group(function () {
             Route::get('/{resume}', 'show')->name('show');
             Route::get('/create', 'create')->name('create');
             Route::put('/{resume}', 'update')->name('update');
+            Route::delete('/{resume}', 'delete')->name('delete');
         });
 });
 

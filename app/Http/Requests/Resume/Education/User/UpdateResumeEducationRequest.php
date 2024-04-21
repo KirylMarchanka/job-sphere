@@ -4,8 +4,6 @@ namespace App\Http\Requests\Resume\Education\User;
 
 use App\Components\Resume\Education\Enums\DegreeEnum;
 use App\Models\EducationalInstitution;
-use App\Rules\EnsureThatEntityLimitIsNotReached;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 

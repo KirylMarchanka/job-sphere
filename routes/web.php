@@ -68,7 +68,11 @@ Route::prefix('/users')->name('users.')->group(function () {
                 ->name('work-experiences.')
                 ->controller(ResumeWorkExperienceController::class)
                 ->group(function () {
+                    Route::get('/create', 'create')->name('create');
+                    Route::post('/', 'store')->name('store');
+                    Route::get('/{workExperience}/edit', 'edit')->name('edit');
                     Route::delete('/{workExperience}', 'delete')->name('delete');
+                    Route::put('/{workExperience}', 'update')->name('update');
                 });
 
             Route::prefix('/{resume}/educations')

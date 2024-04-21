@@ -254,7 +254,7 @@
                             </p>
 
                             <div class="d-flex justify-content-between">
-                                <a class="btn btn-primary">Редактировать</a>
+                                <a class="btn btn-primary" href="{{ route('users.resumes.work-experiences.edit', ['resume' => $resume->getKey(), 'workExperience' => $workExperience->getKey()]) }}">Редактировать</a>
 
                                 <button type="submit" form="delete-work-experience-{{ $workExperience->id }}"
                                         class="btn btn-danger d-inline-block">Удалить
@@ -265,7 +265,7 @@
                 @endforeach
 
                 @if(!$resume->getAttribute('reached_limits')['work_experience'])
-                    <a class="btn btn-primary mb-3" href="">Добавить опыт работы</a>
+                    <a class="btn btn-primary mb-3" href="{{ route('users.resumes.work-experiences.create', ['resume' => $resume->getKey()]) }}">Добавить опыт работы</a>
                 @endif
 
                 <h1 class="display-5">Образование</h1>

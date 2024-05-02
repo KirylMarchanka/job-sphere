@@ -8,6 +8,6 @@ class JobApplyRequest extends BaseJobRequest
 {
     public function authorize(): bool
     {
-        return $this->user('api.users')->resumes()->where('id', $this->input('resume'))->exists();
+        return $this->user('web.users')->resumes()->where('id', $this->input('resume'))->exists();
     }
 }

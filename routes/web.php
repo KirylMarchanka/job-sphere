@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\User\LogoutController;
 use App\Http\Controllers\Auth\User\RegisterController;
 use App\Http\Controllers\Auth\User\VerifyEmailController;
 use App\Http\Controllers\Job\Common\JobController;
+use App\Http\Controllers\Job\User\Applies\ApplyController;
 use App\Http\Controllers\Main\MainPageController;
 use App\Http\Controllers\Profile\User\ProfileController;
 use App\Http\Controllers\Resume\Common\ResumeController;
@@ -97,6 +98,8 @@ Route::prefix('/employers')->name('employers.')->group(function () {
     Route::prefix('/{employer}/jobs')->name('jobs.')->group(function () {
         Route::get('/{job}', [JobController::class, 'show'])->name('show');
     });
+
+    Route::post('/jobs/{job}/apply', [ApplyController::class, 'apply'])->name('jobs.apply');
 });
 
 Route::prefix('/resumes')->name('resumes.')->group(function () {

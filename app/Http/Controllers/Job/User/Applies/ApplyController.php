@@ -9,14 +9,13 @@ use App\Components\Responser\Facades\Responser;
 use App\Components\Resume\Repositories\ResumeRepository;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Job\Traits\JobApplyTrait;
-use App\Http\Requests\Job\User\Applies\JobApplyIndexRequest;
 use App\Http\Requests\Job\User\Applies\JobApplyRequest;
 use App\Http\Requests\Job\User\Applies\JobApplyShowRequest;
 use App\Models\EmployerJob;
 use App\Models\JobApply;
-use App\Models\Resume;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class ApplyController extends Controller
@@ -32,17 +31,22 @@ class ApplyController extends Controller
         JobApplyRepository $jobApplyRepository,
         ConversationRepository $conversationRepository,
         ConversationMessageRepository $messageRepository
-    ): JsonResponse
+    ): RedirectResponse
     {
-        return $this->sendJobApplyRequest(
+        $this->sendJobApplyRequest(
             $resumeRepository->get($request->integer('resume')),
             $job,
-            $request->user('api.users'),
+            $request->user('web.users'),
             $request->input('message'),
             $jobApplyRepository,
             $conversationRepository,
             $messageRepository
         );
+
+        return redirect()->route('employers.jobs.show', [
+            'employer' => $job->getAttribute('employer_id'),
+            'job' => $job->getKey(),
+        ])->with('notification', ['message' => 'Отклик отправлен работодателю.']);
     }
 
     public function index(Request $request): JsonResponse

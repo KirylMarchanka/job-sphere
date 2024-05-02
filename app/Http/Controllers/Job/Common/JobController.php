@@ -10,6 +10,7 @@ use App\Components\Employer\Job\Repositories\JobRepository;
 use App\Components\Employer\Sector\Repositories\SectorRepository;
 use App\Components\Resume\Enums\EmploymentEnum;
 use App\Components\Resume\Enums\ScheduleEnum;
+use App\Components\Resume\Repositories\ResumeRepository;
 use App\Components\Skill\Repositories\SkillRepository;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Job\Common\JobIndexRequest;
@@ -61,12 +62,13 @@ class JobController extends Controller
         ]);
     }
 
-    public function show(Request $request, Employer $employer, EmployerJob $job): View
+    public function show(Request $request, Employer $employer, EmployerJob $job, ResumeRepository $resumeRepository): View
     {
         return view('employers.jobs.show', [
             'employer' => $employer,
             'job' => $job->load(['city.country', 'skills'])->toArray(),
-            'previousPage' => $this->getPreviousPage($request->headers->get('referer'))
+            'previousPage' => $this->getPreviousPage($request->headers->get('referer')),
+            'resumes' => $request->user('web.users') ? $resumeRepository->setUser($request->user('web.users'))->getResumesForJobApply($job->getKey()) : collect(),
         ]);
     }
 

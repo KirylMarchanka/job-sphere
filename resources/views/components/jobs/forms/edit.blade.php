@@ -47,7 +47,6 @@
                 <input type="text" name="street" @class(['form-control', 'my-1', 'is-invalid' => $errors->has('street')]) id="street" required
                        placeholder="Улица" value="{{ old('street', $job->getAttribute('street')) }}">
                 @include('components.forms.error', ['errorKey' => 'street'])
-
             </div>
 
             <div class="form-group">

@@ -16,6 +16,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 class ResumeRepository
 {
@@ -253,6 +254,14 @@ class ResumeRepository
     public function get(int $id): ?Resume
     {
         return Resume::query()->whereKey($id)->first();
+    }
+
+    public function getResumesForJobApply(int $job): Collection
+    {
+        return $this->user->resumes()->select(['resumes.id', 'resumes.user_id', 'resumes.title'])
+            ->whereDoesntHave('applies', function (Builder $builder) use ($job) {
+                return $builder->where('employer_job_id', $job);
+            })->get();
     }
 
     public function setUser(User $user): ResumeRepository

@@ -35,5 +35,11 @@
                     <a class="btn btn-primary" href="{{ route('users.resumes.create') }}">Создать</a>
                 </div>
             @endforelse
+
+            @if(!empty($resumes))
+                <div class="d-flex mb-3">
+                    <a class="btn btn-primary" href="{{ route('users.resumes.create') }}">Создать</a>
+                </div>
+            @endif
         </div>
 @endsection

@@ -10,6 +10,7 @@ use App\Components\Resume\DTOs\ResumePersonalInformationDto;
 use App\Components\Resume\DTOs\ResumeSkillDto;
 use App\Components\Resume\DTOs\ResumeSpecializationDto;
 use App\Components\Resume\DTOs\ResumeWorkExperienceDto;
+use App\Components\Resume\Education\Enums\DegreeEnum;
 use App\Components\Resume\Enums\EmploymentEnum;
 use App\Components\Resume\Enums\ScheduleEnum;
 use App\Components\Resume\Enums\StatusEnum;
@@ -27,6 +28,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Resume\User\DeleteResumeRequest;
 use App\Http\Requests\Resume\User\StoreResumeRequest;
 use App\Http\Requests\Resume\User\UpdateResumeRequest;
+use App\Models\EducationalInstitution;
 use App\Models\Resume;
 use App\Models\ResumeContact;
 use App\Rules\EnsureThatEntityLimitIsNotReached;
@@ -41,6 +43,24 @@ class ResumeController extends Controller
         $resumes = $repository->setUser($request->user())->all();
 
         return view('users.resume.index', ['resumes' => $resumes]);
+    }
+
+    public function create(
+        CityRepository           $cityRepository,
+        SkillRepository          $skillRepository,
+        SpecializationRepository $specializationRepository,
+    ): View
+    {
+        return view('users.resume.create', [
+            'statuses' => StatusEnum::toArray(),
+            'cities' => $cityRepository->all(),
+            'employments' => EmploymentEnum::toArray(),
+            'schedules' => ScheduleEnum::toArray(),
+            'skills' => $skillRepository->all(),
+            'specializations' => $specializationRepository->getChildren(),
+            'educationalInstitutions' => EducationalInstitution::query()->select(['id', 'name'])->get(),
+            'degrees' => DegreeEnum::toArray(),
+        ]);
     }
 
     public function show(
@@ -127,7 +147,6 @@ class ResumeController extends Controller
 
     public function delete(DeleteResumeRequest $request, Resume $resume, ResumeRepository $repository): RedirectResponse
     {
-        dd($resume, $request->method());
         $repository->setUser($request->user('web.users'))->delete($resume->getKey());
 
         return redirect()->route('users.resumes.index');

@@ -14,6 +14,7 @@ use App\Models\City;
 use App\Models\EducationalInstitution;
 use App\Models\Skill;
 use Carbon\Carbon;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -76,8 +77,8 @@ class StoreResumeRequest extends FormRequest
             'education.*.department' => ['required', 'string', 'max:255'],
             'education.*.specialization' => ['required', 'string', 'max:255'],
             'education.*.degree' => ['required', 'integer', 'numeric', 'min:0', Rule::enum(DegreeEnum::class)],
-            'education.*.start_date' => ['required', 'date_format:Y-m', 'before_or_equal:today'],
-            'education.*.end_date' => ['required', 'date_format:Y-m', 'after_or_equal:education.*.start_date'],
+            'education.*.start_date' => ['required', 'date_format:Y-m-d', 'before_or_equal:today'],
+            'education.*.end_date' => ['required', 'date_format:Y-m-d', 'after_or_equal:education.*.start_date'],
 
             'work_experiences' => ['sometimes', 'array', 'max:10'],
             'work_experiences.*' => ['required_with:work_experiences', 'array:company_name,city_id,position,site_url,description,from,to'],
@@ -86,8 +87,8 @@ class StoreResumeRequest extends FormRequest
             'work_experiences.*.position' => ['required_with:work_experiences.*', 'string', 'max:255'],
             'work_experiences.*.site_url' => ['sometimes', 'nullable', 'string', 'max:255'],
             'work_experiences.*.description' => ['sometimes', 'nullable', 'string'],
-            'work_experiences.*.from' => ['required_with:work_experiences.*', 'date_format:Y-m', 'before_or_equal:today'],
-            'work_experiences.*.to' => ['sometimes', 'nullable', 'date_format:Y-m', 'before_or_equal:today'],
+            'work_experiences.*.from' => ['required_with:work_experiences.*', 'date_format:Y-m-d', 'before_or_equal:today'],
+            'work_experiences.*.to' => ['sometimes', 'nullable', 'date_format:Y-m-d', 'before_or_equal:today'],
         ];
     }
 

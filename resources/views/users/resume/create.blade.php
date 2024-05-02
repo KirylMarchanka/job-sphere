@@ -8,18 +8,14 @@
 @section('content')
     <div class="row mt-3">
         <div class="col-md-12">
-            <form action="{{ route('users.resumes.update', $resume->getAttribute('id')) }}" method="POST"
-                  id="resume-update">
+            <form action="{{ route('users.resumes.store') }}" id="resume-store" method="POST">
                 @csrf
-                @method('PUT')
-                <h1 class="display-4 mb-4">Обновить резюме: {{ $resume->getAttribute('title') }}</h1>
+                <h1 class="display-4 mb-4">Создать резюме</h1>
 
                 <div class="row">
                     <div class="col-sm-12">
                         <p class="lead">Заголовок: @include('components.forms.is-required-mark')</p>
-                        <input type="text" name="title"
-                               value="{{ $resume->getAttribute('title') }}"
-                               @class(['form-control']) required>
+                        <input type="text" name="title" value="{{ old('title') }}" @class(['form-control']) required>
                         @include('components.forms.error', ['errorKey' => 'title'])
                     </div>
                 </div>
@@ -28,7 +24,7 @@
                     <div class="col-sm-4">
                         <p class="lead">Фамилия: @include('components.forms.is-required-mark')</p>
                         <input type="text" name="personal_information[surname]"
-                               value="{{ $resume->getRelation('personalInformation')->getAttribute('surname') }}"
+                               value="{{ old('personal_information[surname]') }}"
                                @class(['form-control']) required>
                         @include('components.forms.error', ['errorKey' => 'personal_information[surname]'])
                     </div>
@@ -36,14 +32,14 @@
                     <div class="col-sm-4">
                         <p class="lead">Имя: @include('components.forms.is-required-mark')</p>
                         <input type="text" name="personal_information[name]"
-                               value="{{ $resume->personalInformation->name }}" @class(['form-control']) required>
+                               value="{{ old('personal_information[name]') }}" @class(['form-control']) required>
                         @include('components.forms.error', ['errorKey' => 'personal_information[name]'])
                     </div>
 
                     <div class="col-sm-4">
                         <p class="lead">Отчество:</p>
                         <input type="text" minlength="2" name="personal_information[middle_name]"
-                               value="{{ $resume->personalInformation->middle_name }}" @class(['form-control'])>
+                               value="{{ old('personal_information[middle_name]') }}" @class(['form-control'])>
                         @include('components.forms.error', ['errorKey' => 'personal_information[middle_name]'])
                     </div>
                 </div>
@@ -54,7 +50,7 @@
                         <select name="status" @class(['form-control']) required>
                             @foreach($statuses as $status => $text)
                                 <option
-                                    value="{{ $status }}" @selected(old('status', $resume->getRawOriginal('status')) == $status)>{{ $text }}</option>
+                                    value="{{ $status }}" @selected(old('status') == $status)>{{ $text }}</option>
                             @endforeach
                         </select>
                         @include('components.forms.error', ['errorKey' => 'status'])
@@ -65,7 +61,7 @@
                     <div class="col-sm-4">
                         <p class="lead">Дата рождения: @include('components.forms.is-required-mark')</p>
                         <input type="date" name="personal_information[birthdate]"
-                               value="{{ old('personal_information[birthdate]', $resume->personalInformation->birthdate) }}"
+                               value="{{ old('personal_information[birthdate]') }}"
                                @class(['form-control']) required>
                         @include('components.forms.error', ['errorKey' => 'personal_information[birthdate]'])
                     </div>
@@ -74,11 +70,11 @@
                         <p class="lead">Пол: @include('components.forms.is-required-mark')</p>
                         <select name="personal_information[sex]" @class(['form-control']) required>
                             <option
-                                value="m" @selected(old('personal_information[sex]', $resume->personalInformation->sex) === 'm')>
+                                value="m" @selected(old('personal_information[sex]') === 'm')>
                                 Мужчина
                             </option>
                             <option
-                                value="f" @selected(old('personal_information[sex]', $resume->personalInformation->sex) === 'f')>
+                                value="f" @selected(old('personal_information[sex]') === 'f')>
                                 Женщина
                             </option>
                         </select>
@@ -90,7 +86,7 @@
                         <select name="personal_information[city_id]" id="city" @class(['form-control']) required>
                             @foreach($cities as $city)
                                 <option
-                                    value="{{ $city['id'] }}" @selected(old('personal_information[city_id]', $resume->personalInformation->city_id) == $city['id'])>{{ $city['name'] }}</option>
+                                    value="{{ $city['id'] }}" @selected(old('personal_information[city_id]') == $city['id'])>{{ $city['name'] }}</option>
                             @endforeach
                         </select>
                         @include('components.forms.error', ['errorKey' => 'personal_information[city_id]'])
@@ -103,7 +99,7 @@
                     <div class="col-sm-6">
                         <p class="lead">Зарплата:</p>
                         <input type="number" name="salary"
-                               value="{{ old('salary', $resume->salary) }}" @class(['form-control'])>
+                               value="{{ old('salary') }}" @class(['form-control'])>
                         @include('components.forms.error', ['errorKey' => 'personal_information[salary]'])
                     </div>
 
@@ -112,7 +108,7 @@
                         <select name="employment" @class(['form-control']) required>
                             @foreach($employments as $value => $text)
                                 <option
-                                    value="{{ $value }}" @selected(old('employment', $resume->employment) == $value)>{{ $text }}</option>
+                                    value="{{ $value }}" @selected(old('employment') == $value)>{{ $text }}</option>
                             @endforeach
                         </select>
                         @include('components.forms.error', ['errorKey' => 'personal_information[employment]'])
@@ -125,7 +121,7 @@
                         <select name="schedule" @class(['form-control']) required>
                             @foreach($schedules as $value => $text)
                                 <option
-                                    value="{{ $value }}" @selected(old('schedule', $resume->schedule) == $value)>{{ $text }}</option>
+                                    value="{{ $value }}" @selected(old('schedule') == $value)>{{ $text }}</option>
                             @endforeach
                         </select>
                         @include('components.forms.error', ['errorKey' => 'personal_information[schedule]'])
@@ -138,28 +134,28 @@
                     <div class="col-sm-3">
                         <p class="lead">Номер телефона:</p>
                         <input type="tel" name="contact[mobile_number]"
-                               value="{{ old('contact[mobile_number]', $resume->contact->mobile_number) }}" @class(['form-control'])>
+                               value="{{ old('contact[mobile_number]') }}" @class(['form-control'])>
                         @include('components.forms.error', ['errorKey' => 'contact[mobile_number]'])
                     </div>
 
                     <div class="col-sm-3">
                         <p class="lead">Почта:</p>
                         <input type="email" name="contact[email]"
-                               value="{{ old('contact[email]', $resume->contact->email) }}" @class(['form-control'])>
+                               value="{{ old('contact[email]') }}" @class(['form-control'])>
                         @include('components.forms.error', ['errorKey' => 'contact[email]'])
                     </div>
 
                     <div class="col-sm-3">
                         <p class="lead">LinkedIn:</p>
                         <input type="text" name="contact[other_sources][linkedin]"
-                               value="{{ old('contact[other_sources][linkedin]', $resume->contact->getAttribute('original_other_sources')['linkedin']) }}" @class(['form-control'])>
+                               value="{{ old('contact[other_sources][linkedin]') }}" @class(['form-control'])>
                         @include('components.forms.error', ['errorKey' => 'contact[other_sources][linkedin]'])
                     </div>
 
                     <div class="col-sm-3">
                         <p class="lead">Telegram:</p>
                         <input type="text" name="contact[other_sources][telegram]"
-                               value="{{ old('contact[other_sources][telegram]', $resume->contact->getAttribute('original_other_sources')['telegram']) }}" @class(['form-control'])>
+                               value="{{ old('contact[other_sources][telegram]') }}" @class(['form-control'])>
                         @include('components.forms.error', ['errorKey' => 'contact[other_sources][telegram]'])
                     </div>
 
@@ -168,28 +164,28 @@
                         <div @class(["form-check", "form-check-inline"])>
                             <input @class(["form-check-input"]) type="radio" name="contact[preferred_contact_source]"
                                    id="preferredContactSource-mobile"
-                                   value="0" @checked($resume->contact->getRawOriginal('preferred_contact_source') == 0)>
+                                   value="0" @checked(old('contact[preferred_contact_source]') == 0)>
                             <label @class(["form-check-label"]) for="preferredContactSource-mobile">Номер телефона</label>
                         </div>
 
                         <div @class(["form-check", "form-check-inline"])>
                             <input @class(["form-check-input"]) type="radio" name="contact[preferred_contact_source]"
                                    id="preferredContactSource-email"
-                                   value="1" @checked($resume->contact->getRawOriginal('preferred_contact_source') == 1)>
+                                   value="1" @checked(old('contact[preferred_contact_source]') == 1)>
                             <label @class(["form-check-label"]) for="preferredContactSource-email">Почта</label>
                         </div>
 
                         <div @class(["form-check", "form-check-inline"])>
                             <input @class(["form-check-input"]) type="radio" name="contact[preferred_contact_source]"
                                    id="preferredContactSource-linkedin"
-                                   value="2" @checked($resume->contact->getRawOriginal('preferred_contact_source') == 2)>
+                                   value="2" @checked(old('contact[preferred_contact_source]') == 2)>
                             <label @class(["form-check-label"]) for="preferredContactSource-linkedin">LinkedIn</label>
                         </div>
 
                         <div @class(["form-check", "form-check-inline"])>
                             <input @class(["form-check-input"]) type="radio" name="contact[preferred_contact_source]"
                                    id="preferredContactSource-telegram"
-                                   value="3" @checked($resume->contact->getRawOriginal('preferred_contact_source') == 3)>
+                                   value="3" @checked(old('contact[preferred_contact_source]') == 3)>
                             <label @class(["form-check-label"]) for="preferredContactSource-telegram">Telegram</label>
                         </div>
 
@@ -199,7 +195,7 @@
                     <div class="col-sm-3">
                         <p class="lead">Комментарий:</p>
                         <textarea
-                            name="contact[comment]" @class(['form-control'])>{{ $resume['contact']['comment'] }}</textarea>
+                            name="contact[comment]" @class(['form-control'])>{{ old('contact[contact][comment]') }}</textarea>
 
                         @include('components.forms.error', ['errorKey' => 'contact[contact][comment]'])
                     </div>
@@ -213,7 +209,7 @@
                         <select multiple name="skills[]" id="skills" @class(['form-control']) required>
                             @foreach($skills as $skill)
                                 <option
-                                    value="{{ $skill['id'] }}" @selected(in_array($skill['id'], old('skills', $resume->skills->pluck('id')->toArray())))>{{ $skill['name'] }}</option>
+                                    value="{{ $skill['id'] }}" @selected(in_array($skill['id'], old('skills', [])))>{{ $skill['name'] }}</option>
                             @endforeach
                         </select>
                         @include('components.forms.error', ['errorKey' => 'skills'])
@@ -225,7 +221,7 @@
                                 @class(['form-control']) required>
                             @foreach($specializations as $specialization)
                                 <option
-                                    value="{{ $specialization['id'] }}" @selected(in_array($specialization['id'], old('specializations', $resume->specializations->pluck('id')->toArray())))>{{ $specialization['name'] }}</option>
+                                    value="{{ $specialization['id'] }}" @selected(in_array($specialization['id'], old('specializations', [])))>{{ $specialization['name'] }}</option>
                             @endforeach
                         </select>
                         @include('components.forms.error', ['errorKey' => 'specializations'])
@@ -237,88 +233,139 @@
                 <div class="row">
                     <div class="col-12">
                         <textarea
-                            name="description" @class(['form-control'])>{{ old('description', $resume['description']) }}</textarea>
+                            name="description" @class(['form-control'])>{{ old('description') }}</textarea>
                         @include('components.forms.error', ['errorKey' => 'description'])
                     </div>
                 </div>
 
                 <h1 class="display-5">Опыт работы</h1>
+                <div class="border p-3">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <p class="lead">Местоположение: @include('components.forms.is-required-mark')</p>
+                            <select name="work_experiences[0][city_id]" id="city" @class(['form-control'])>
+                                @foreach($cities as $city)
+                                    <option
+                                        value="{{ $city['id'] }}" @selected(old('work_experiences[0][city_id]') == $city['id'])>{{ $city['name'] }}</option>
+                                @endforeach
+                            </select>
+                            @include('components.forms.error', ['errorKey' => 'work_experiences[0][city_id]'])
+                        </div>
 
-                @foreach($resume->workExperiences as $workExperience)
-                    <div class="row border py-2 mb-3">
-                        <div class="col-12">
-                            <p><b>Компания:</b> {{ $workExperience['company_name'] }}</p>
-                            <p><b>Должность:</b> {{ $workExperience['position'] }}</p>
-                            <p><b>Даты
-                                    работы:</b> {{ sprintf('%s%s', $workExperience['from']->format('Y-m'), $workExperience['to'] !== null ? ' - ' . $workExperience['to']->format('Y-m') : '') }}
-                            </p>
+                        <div class="col-sm-4">
+                            <p class="lead">Компания: @include('components.forms.is-required-mark')</p>
+                            <input type="text" name="work_experiences[0][company_name]"
+                                   value="{{ old('work_experiences[0][company_name]') }}" @class(['form-control'])>
+                            @include('components.forms.error', ['errorKey' => 'work_experiences[0][company_name]'])
+                        </div>
 
-                            <div class="d-flex justify-content-between">
-                                <a class="btn btn-primary" href="{{ route('users.resumes.work-experiences.edit', ['resume' => $resume->getKey(), 'workExperience' => $workExperience->getKey()]) }}">Редактировать</a>
-
-                                <button type="submit" form="delete-work-experience-{{ $workExperience->id }}"
-                                        class="btn btn-danger d-inline-block">Удалить
-                                </button>
-                            </div>
+                        <div class="col-sm-4">
+                            <p class="lead">Должность: @include('components.forms.is-required-mark')</p>
+                            <input type="text" name="work_experiences[0][position]"
+                                   value="{{ old('work_experiences[0][position]') }}" @class(['form-control'])>
+                            @include('components.forms.error', ['errorKey' => 'work_experiences[0][position]'])
                         </div>
                     </div>
-                @endforeach
 
-                @if(!$resume->getAttribute('reached_limits')['work_experience'])
-                    <a class="btn btn-primary mb-3" href="{{ route('users.resumes.work-experiences.create', ['resume' => $resume->getKey()]) }}">Добавить опыт работы</a>
-                @endif
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <p class="lead">Сайт компании:</p>
+                            <input type="url" name="work_experiences[0][site_url]"
+                                   value="{{ old('work_experiences[0][site_url]') }}" @class(['form-control'])>
+                            @include('components.forms.error', ['errorKey' => 'work_experiences[0][site_url]'])
+                        </div>
 
-                <h1 class="display-5">Образование</h1>
-
-                @foreach($resume->education as $education)
-                    <div class="row border py-2 mb-3">
-                        <div class="col-12">
-                            <p><b>Учреждение:</b> {{ $education->educationalInstitution->name }}</p>
-                            <p><b>Факультет:</b> {{ $education->department }}</p>
-                            <p><b>Специальность:</b> {{ $education->specialization }}</p>
-                            <p><b>Даты
-                                    обучения:</b> {{ sprintf('%s - %s', $education->start_date->format('Y-m'), $education->end_date->format('Y-m')) }}
-                            </p>
-
-                            <div class="d-flex justify-content-between">
-                                <a class="btn btn-primary" href="{{ route('users.resumes.educations.edit', ['resume' => $resume->getKey(), 'education' => $education->getKey()]) }}">Редактировать</a>
-                                <button type="submit" form="delete-education-{{ $education->id }}"
-                                        class="btn btn-danger d-inline-block">Удалить
-                                </button>
-                            </div>
+                        <div class="col-sm-8">
+                            <p class="lead">Описание:</p>
+                            <textarea name="work_experiences[0][description]" @class(['form-control'])>{{ old('work_experiences[0][description]') }}</textarea>
+                            @include('components.forms.error', ['errorKey' => 'work_experiences[0][description]'])
                         </div>
                     </div>
-                @endforeach
 
-                <div class="d-flex align-baseline justify-content-between my-3">
-                    @if(!$resume->getAttribute('reached_limits')['education'])
-                        <a class="btn btn-primary me-3" href="{{ route('users.resumes.educations.create', ['resume' => $resume->getKey()]) }}">Добавить образование</a>
-                    @endif
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <p class="lead">Начало работы: @include('components.forms.is-required-mark')</p>
+                            <input type="date" name="work_experiences[0][from]"
+                                   value="{{ old('work_experiences[0][from]') }}"
+                                   @class(['form-control']) required>
+                            @include('components.forms.error', ['errorKey' => 'work_experiences[0][from]'])
+                        </div>
 
-                    <button type="submit" form="resume-update" class="btn btn-primary">Обновить резюме</button>
+                        <div class="col-sm-4">
+                            <p class="lead">Окончание работы:</p>
+                            <input type="date" name="work_experiences[0][to]"
+                                   value="{{ old('work_experiences[0][to]') }}"
+                                @class(['form-control'])>
+                            @include('components.forms.error', ['errorKey' => 'work_experiences[0][to]'])
+                        </div>
+                    </div>
                 </div>
 
+                <h1 class="display-5">Образование</h1>
+                <div class="border p-3 mb-3">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p class="lead">Учреждение образования: @include('components.forms.is-required-mark')</p>
+                            <select name="education[0][educational_institution_id]" @class(['form-control']) required>
+                                @foreach($educationalInstitutions as $educationalInstitution)
+                                    <option
+                                        value="{{ $educationalInstitution->id }}" @selected(old('education[0][educational_institution_id]') == $educationalInstitution->id)>{{ $educationalInstitution->name }}</option>
+                                @endforeach
+                            </select>
+                            @include('components.forms.error', ['errorKey' => 'education[0][educational_institution_id]'])
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <p class="lead">Факультет: @include('components.forms.is-required-mark')</p>
+                            <input type="text" name="education[0][department]"
+                                   value="{{ old('education[0][department]') }}" @class(['form-control'])>
+                            @include('components.forms.error', ['errorKey' => 'education[0][department]'])
+                        </div>
+
+                        <div class="col-sm-4">
+                            <p class="lead">Специальность: @include('components.forms.is-required-mark')</p>
+                            <input type="text" name="education[0][specialization]"
+                                   value="{{ old('education[0][specialization]') }}" @class(['form-control'])>
+                            @include('components.forms.error', ['errorKey' => 'education[0][specialization]'])
+                        </div>
+
+                        <div class="col-sm-4">
+                            <p class="lead">Уровень образования: @include('components.forms.is-required-mark')</p>
+                            <select name="education[0][degree]" @class(['form-control'])>
+                                @foreach($degrees as $value => $text)
+                                    <option
+                                        value="{{ $value }}" @selected(old('education[0][degree]') == $value)>{{ $text }}</option>
+                                @endforeach
+                            </select>
+                            @include('components.forms.error', ['errorKey' => 'education[0][degree]'])
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <p class="lead">Начало обучения: @include('components.forms.is-required-mark')</p>
+                            <input type="date" name="education[0][start_date]"
+                                   value="{{ old('education[0][start_date]') }}"
+                                   @class(['form-control']) required>
+                            @include('components.forms.error', ['errorKey' => 'education[0][start_date]'])
+                        </div>
+
+                        <div class="col-sm-4">
+                            <p class="lead">Окончание обучения: @include('components.forms.is-required-mark')</p>
+                            <input type="date" name="education[0][end_date]"
+                                   value="{{ old('education[0][end_date]"') }}"
+                                   @class(['form-control']) required>
+                            @include('components.forms.error', ['errorKey' => 'education[0][end_date]"'])
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" form="resume-store" class="btn btn-primary mb-3">Создать</button>
             </form>
         </div>
     </div>
-
-    @foreach($resume->education as $education)
-        <form
-            action="{{ route('users.resumes.educations.delete', ['resume' => $resume['id'], 'education' => $education->id]) }}"
-            id="delete-education-{{ $education->id }}" method="POST">
-            @method('DELETE')
-            @csrf
-        </form>
-    @endforeach
-
-    @foreach($resume->workExperiences as $workExperience)
-        <form
-            action="{{ route('users.resumes.work-experiences.delete', ['resume' => $resume['id'], 'workExperience' => $workExperience['id']]) }}"
-            id="delete-work-experience-{{ $workExperience->id }}" method="POST">
-            @method('DELETE')
-            @csrf
-        </form>
-    @endforeach
 @endsection
 
 @section('script')

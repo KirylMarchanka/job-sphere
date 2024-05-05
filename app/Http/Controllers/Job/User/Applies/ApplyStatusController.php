@@ -10,6 +10,7 @@ use App\Http\Controllers\Job\Traits\JobApplyTrait;
 use App\Http\Requests\Job\User\Applies\JobApplyUpdateStatusRequest;
 use App\Models\JobApply;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 
 class ApplyStatusController extends Controller
 {
@@ -20,15 +21,19 @@ class ApplyStatusController extends Controller
         JobApply $apply,
         JobApplyRepository $jobApplyRepository,
         ConversationMessageRepository $messageRepository
-    ): JsonResponse
+    ): RedirectResponse
     {
-        return $this->changeApplyStatus(
-            $request->user('api.users'),
+        $this->changeApplyStatus(
+            $request->user('web.users'),
             $apply,
             JobApplyStatusEnum::from($request->integer('status')),
             $request->input('message'),
             $jobApplyRepository,
             $messageRepository
         );
+
+        return redirect()->route('users.invites-and-applies.show', [
+            'apply' => $apply->getKey(),
+        ])->with('notification', ['message' => 'Сообщение отправлено работодателю.']);
     }
 }

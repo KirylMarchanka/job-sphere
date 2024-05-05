@@ -11,6 +11,7 @@ use App\Models\EmployerJob;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
 
 class JobRepository
 {
@@ -104,5 +105,14 @@ class JobRepository
             ->limit(5)
             ->get()
             ->toArray();
+    }
+
+    public function getJobsToSendInvite(int $resume): Collection
+    {
+        return $this->employer
+            ->jobs()
+            ->whereDoesntHave('applies', fn(Builder $builder) => $builder->where('resume_id', $resume))
+            ->where('is_archived', false)
+            ->get();
     }
 }

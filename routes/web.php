@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\User\RegisterController;
 use App\Http\Controllers\Auth\User\VerifyEmailController;
 use App\Http\Controllers\Job\Common\JobController;
 use App\Http\Controllers\Job\User\Applies\ApplyController;
+use App\Http\Controllers\Job\User\Applies\ApplyStatusController;
 use App\Http\Controllers\Main\MainPageController;
 use App\Http\Controllers\Profile\User\ProfileController;
 use App\Http\Controllers\Resume\Common\ResumeController;
@@ -52,10 +53,17 @@ Route::prefix('/users')->name('users.')->group(function () {
         Route::delete('/', 'destroy')->name('delete');
     });
 
+    Route::prefix('/invites-and-applies')->name('invites-and-applies.')->middleware('auth:web.users')->group(function () {
+        Route::get('/', [ApplyController::class, 'index'])->name('index');
+        Route::get('/{apply}', [ApplyController::class, 'show'])->name('show');
+        Route::post('/{apply}', [ApplyStatusController::class, 'update'])->name('update');
+    });
+
     Route::prefix('/resumes')
         ->name('resumes.')
         ->middleware('auth:web.users')
         ->group(function () {
+
             Route::controller(UserResumeController::class)
                 ->group(function () {
                     Route::get('/', 'index')->name('index');

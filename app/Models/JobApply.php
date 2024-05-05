@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class JobApply extends Model
 {
@@ -29,5 +29,16 @@ class JobApply extends Model
     public function conversation(): HasOne
     {
         return $this->hasOne(Conversation::class);
+    }
+
+    protected function status(): Attribute
+    {
+        return Attribute::make(get: function (int $status) {
+            return match ($status) {
+                1 => 'Отклонен',
+                2 => 'Приглашен',
+                default => 'Ожидает рассмотрения',
+            };
+        });
     }
 }

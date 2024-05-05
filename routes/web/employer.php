@@ -5,6 +5,8 @@ use App\Http\Controllers\Auth\Employer\LogoutController;
 use App\Http\Controllers\Auth\Employer\RegisterController;
 use App\Http\Controllers\Auth\Employer\VerifyEmailController;
 use App\Http\Controllers\Employer\Common\EmployerController;
+use App\Http\Controllers\Job\Employer\Invites\InviteController;
+use App\Http\Controllers\Job\Employer\Invites\InviteStatusController;
 use App\Http\Controllers\Job\Employer\JobArchiveStateController;
 use App\Http\Controllers\Job\Employer\JobController;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +30,12 @@ Route::name('verification.')->group(function () {
 });
 
 Route::prefix('/jobs')->name('jobs.')->middleware('auth:web.employers')->group(function () {
+    Route::prefix('/invites-and-applies')->name('invites-and-applies.')->group(function () {
+        Route::get('/', [InviteController::class, 'index'])->name('index');
+        Route::get('/{apply}', [InviteController::class, 'show'])->name('show');
+        Route::post('/{apply}', [InviteStatusController::class, 'update'])->name('update');
+    });
+
     Route::controller(JobController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
@@ -42,6 +50,13 @@ Route::prefix('/jobs')->name('jobs.')->middleware('auth:web.employers')->group(f
         ->group(function () {
             Route::put('/archive', 'archive')->name('archive');
             Route::put('/unarchive', 'unarchive')->name('unarchive');
+        });
+
+    Route::prefix('/{job}')
+        ->name('invites.')
+        ->controller(InviteController::class)
+        ->group(function () {
+            Route::post('/invite', 'invite')->name('invite');
         });
 });
 

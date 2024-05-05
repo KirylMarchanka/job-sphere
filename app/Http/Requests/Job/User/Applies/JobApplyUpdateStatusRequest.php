@@ -14,8 +14,8 @@ class JobApplyUpdateStatusRequest extends FormRequest
         $apply = $this->route()->parameter('apply');
 
         return $apply->getAttribute('type') === JobApplyTypeEnum::INVITE->value
-            && $apply->getAttribute('status') === JobApplyStatusEnum::WAIT->value
-            && $this->user('api.users')
+            && $apply->getRawOriginal('status') === JobApplyStatusEnum::WAIT->value
+            && $this->user('web.users')
                 ->resumes()
                 ->where('id', $apply->getAttribute('resume_id'))
                 ->exists();

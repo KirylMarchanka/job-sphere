@@ -13,6 +13,8 @@ class ConversationMessage extends Model
 
     protected $fillable = ['message', 'sender_type', 'sender_id', 'read_at'];
 
+    protected $casts = ['read_at' => 'datetime'];
+
     public function conversation(): BelongsTo
     {
         return $this->belongsTo(Conversation::class);

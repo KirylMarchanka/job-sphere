@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Resume\Common;
 
 use App\Components\City\Repositories\CityRepository;
 use App\Components\Employer\Job\Enums\JobEducationEnum;
+use App\Components\Employer\Job\Repositories\JobRepository;
 use App\Components\Employer\Sector\Repositories\SectorRepository;
 use App\Components\Resume\Enums\EmploymentEnum;
 use App\Components\Resume\Enums\ScheduleEnum;
@@ -34,7 +35,7 @@ class ResumeController extends Controller
         ]);
     }
 
-    public function show(Resume $resume): View
+    public function show(Request $request, Resume $resume, JobRepository $jobRepository): View
     {
         $resume->load([
             'specializations:id,name',
@@ -52,8 +53,11 @@ class ResumeController extends Controller
             'education.educationalInstitution.city.country',
         ])->append('total_work_experience');
 
+        $jobs = $request->user('web.employers') ? $jobRepository->setEmployer($request->user('web.employers'))->getJobsToSendInvite($resume->getKey()) : collect();
+
         return view('resumes.show', [
             'resume' => $resume->toArray(),
+            'jobs' => $jobs,
         ]);
     }
 }

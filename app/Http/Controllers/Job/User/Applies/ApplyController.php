@@ -13,6 +13,7 @@ use App\Http\Requests\Job\User\Applies\JobApplyRequest;
 use App\Http\Requests\Job\User\Applies\JobApplyShowRequest;
 use App\Models\EmployerJob;
 use App\Models\JobApply;
+use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -49,27 +50,31 @@ class ApplyController extends Controller
         ])->with('notification', ['message' => 'Отклик отправлен работодателю.']);
     }
 
-    public function index(Request $request): JsonResponse
+    public function index(Request $request): View
     {
         $applies = JobApply::query()->with([
-            'employerJob:id,title,salary_from,salary_to,salary_employer_paid_taxes,is_archived',
+            'employerJob:id,employer_id,title,salary_from,salary_to,salary_employer_paid_taxes,is_archived',
             'resume:id,title',
         ])->whereHas('resume', function (Builder $builder) use ($request) {
-            return $builder->where('user_id', $request->user('api.users')->getKey());
+            return $builder->where('user_id', $request->user('web.users')->getKey());
         })->get()->toArray();
 
-        return Responser::setData($applies)->success();
+        return view()->make('users.resume.apply.index', [
+            'applies' => $applies,
+        ]);
     }
 
-    public function show(JobApplyShowRequest $request, JobApply $apply): JsonResponse
+    public function show(JobApplyShowRequest $request, JobApply $apply): View
     {
         $apply->loadMissing([
             'resume',
             'employerJob.employer',
             'employerJob.city.country',
-            'conversation.messages',
+            'conversation.messages.sender',
         ]);
 
-        return Responser::setData($apply->toArray())->success();
+        return view()->make('users.resume.apply.show', [
+            'apply' => $apply,
+        ]);
     }
 }

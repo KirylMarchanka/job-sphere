@@ -134,7 +134,8 @@
                         <h5 class="card-title">{{ $experience['position'] }}</h5>
                         <p class="card-text">{{ $experience['description'] }}</p>
                         <p><strong>Компания:</strong> {{ $experience['company_name'] }}</p>
-                        <strong>Сайт компании:</strong> <a href="{{ $experience['site_url'] ?? '#' }}">{{ $experience['site_url'] ?? '-' }}</a>
+                        <strong>Сайт компании:</strong> <a
+                            href="{{ $experience['site_url'] ?? '#' }}">{{ $experience['site_url'] ?? '-' }}</a>
                         <p><strong>Город:</strong> {{ $experience['city']['city_with_country'] }}</p>
                         <p><strong>Начало работы:</strong> {{ $experience['from'] }}</p>
                         <p><strong>Окончание:</strong> {{ $experience['to'] ?? 'Present' }}</p>
@@ -155,6 +156,76 @@
                     </div>
                 </div>
             @endforeach
+
+            @if($jobs->isNotEmpty())
+                @auth('web.employers')
+                    <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">Пригласить
+                    </button>
+                @endauth
+            @endif
         </div>
     </div>
+
+    @if($jobs->isNotEmpty())
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Отправить приглашение</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ route('employers.jobs.invites.invite', ['job' => $jobs->first()->getKey()]) }}" id="job-invite-form"
+                              method="POST">
+                            @csrf
+
+                            <div class="form-group">
+                                <label for="job">Вакансия: @include('components.forms.is-required-mark')</label>
+                                <select name="job" id="job"
+                                        @class(['form-control', 'is-invalid' => $errors->has('job')]) required>
+                                    @foreach($jobs as $job)
+                                        <option @selected(old('job') == $job['id'])
+                                                value="{{ $job['id'] }}">{{ $job['title'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <input type="hidden" class="d-none" value="{{ $resume['id'] }}" name="resume">
+
+                            <div class="form-group">
+                                <label for="message">Сопроводительное
+                                    письмо: @include('components.forms.is-required-mark')</label>
+                                <textarea name="message"
+                                          @class(['form-control', 'my-1', 'is-invalid' => $errors->has('message')]) id="message"
+                                          rows="10" required
+                                          placeholder="Сопроводительное письмо">{{ old('message') }}</textarea>
+                                @include('components.forms.error', ['errorKey' => 'message'])
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <button type="submit" form="job-invite-form" class="btn btn-primary">Пригласить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 @endsection
+
+@if($jobs->isNotEmpty())
+        @section('script')
+        <script>
+            const jobInviteUrl = '{{ route('employers.jobs.invites.invite', ['job' => ':replace']) }}';
+
+            const select = document.getElementById('job');
+            const form = document.getElementById('job-invite-form');
+
+            select.addEventListener('change', function() {
+                form.action = jobInviteUrl.replace(':replace', this.value);
+            });
+        </script>
+    @endsection
+@endif

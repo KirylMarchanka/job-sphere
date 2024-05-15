@@ -11,6 +11,8 @@ class Sector extends Model
 {
     use HasFactory;
 
+    public $timestamps = null;
+
     protected $fillable = ['parent_id', 'name'];
 
     public function employers(): HasMany

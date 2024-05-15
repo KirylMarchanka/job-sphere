@@ -6,6 +6,7 @@ use App\Components\Resume\Contacts\Helpers\ResumeContactParser;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ResumeContact extends Model
 {
@@ -14,6 +15,11 @@ class ResumeContact extends Model
     public $timestamps = false;
 
     protected $fillable = ['mobile_number', 'comment', 'email', 'preferred_contact_source', 'other_sources'];
+
+    public function resume(): BelongsTo
+    {
+        return $this->belongsTo(Resume::class);
+    }
 
     protected function preferredContactSource(): Attribute
     {

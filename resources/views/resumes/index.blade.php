@@ -1,5 +1,9 @@
 @extends('layout.app')
 
+@section('style')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endsection
+
 @section('content')
     <div class="row mt-3">
 
@@ -50,11 +54,11 @@
 
                 <div class="form-group">
                     <label for="city">Город:</label>
-                    <select name="city" id="city" class="form-select my-1">
+                    <select name="city[]" id="city" multiple class="form-select my-1">
                         <option value="">Любой</option>
                         @foreach ($cities as $city)
                             <option
-                                @selected($city['id'] == old('city', $data['city'] ?? 0)) value="{{ $city['id'] }}">{{ $city['name'] }}</option>
+                                @selected(in_array($city['id'], old('city', $data['city'] ?? []))) value="{{ $city['id'] }}">{{ $city['name'] }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -108,7 +112,7 @@
                             <b>Занятость:</b> {{ $resume['employment'] }}<br>
                             <b>График:</b> {{ $resume['schedule'] }}<br>
                             <b>Опыт работы:</b> {{ $resume['total_work_experience'] }}<br>
-                            <span class="salary"><b>Зарплата:</b> {{ $resume['salary'] }} руб.</span>
+                            <span class="salary"><b>Зарплата:</b> {{ $resume['salary'] !== null ? $resume['salary'] . ' руб.' : 'Не указано' }}</span>
                         </p>
                         <a href="{{ route('resumes.show', ['resume' => $resume['id']]) }}"
                            class="btn btn-primary">Показать</a>
@@ -126,4 +130,22 @@
 
 
     {{ $resumes->links() }}
+@endsection
+
+@section('script')
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#skills').select2({
+                maximumSelectionLength: 10,
+                placeholder: "Выберите до 10 навыков"
+            });
+
+            $('#city').select2({
+                maximumSelectionLength: 10,
+                placeholder: "Выберите город"
+            });
+        });
+    </script>
 @endsection

@@ -12,6 +12,11 @@ class ResumePersonalInformation extends Model
 
     protected $fillable = ['name', 'surname', 'middle_name', 'birthdate', 'sex', 'city_id'];
 
+    public function resume(): BelongsTo
+    {
+        return $this->belongsTo(Resume::class);
+    }
+
     public function city(): BelongsTo
     {
         return $this->belongsTo(City::class);

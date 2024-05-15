@@ -10,7 +10,7 @@ enum JobEducationEnum: int
 {
     case NOT_REQUIRED_OR_NOT_SPECIFIED = 0;
     case SPECIAL_SECONDARY = 1;
-    case HIGHER = 3;
+    case HIGHER = 2;
 
     public static function translations(int $education): string
     {

@@ -47,7 +47,7 @@
 
                 <div class="col-sm-6">
                     <p class="lead">Зарплата:</p>
-                    <p>{{ $resume['salary'] }} руб.</p>
+                    <p>{{ $resume['salary'] !== null ? $resume['salary'] . 'руб.' : 'Не указано'  }}</p>
                 </div>
             </div>
 

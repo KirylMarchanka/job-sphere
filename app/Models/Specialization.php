@@ -10,4 +10,6 @@ class Specialization extends Model
     use HasFactory;
 
     protected $hidden = ['pivot'];
+
+    public $timestamps = null;
 }

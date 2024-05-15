@@ -13,6 +13,8 @@ class City extends Model
 
     protected $appends = ['city_with_country'];
 
+    public $timestamps = false;
+
     public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class);

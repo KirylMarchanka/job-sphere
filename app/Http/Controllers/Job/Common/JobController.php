@@ -14,10 +14,8 @@ use App\Components\Resume\Repositories\ResumeRepository;
 use App\Components\Skill\Repositories\SkillRepository;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Job\Common\JobIndexRequest;
-use App\Models\City;
 use App\Models\Employer;
 use App\Models\EmployerJob;
-use App\Models\Skill;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 

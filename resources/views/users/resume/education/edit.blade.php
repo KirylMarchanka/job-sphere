@@ -23,7 +23,7 @@
                     <div class="col-sm-4">
                         <p class="lead">Факультет: @include('components.forms.is-required-mark')</p>
                         <input type="text" name="education[0][department]" required
-                               value="{{ old('department', $education->getAttribute('education[0][department]')) }}" @class(['form-control'])>
+                               value="{{ old('education[0][department]', $education->getAttribute('department')) }}" @class(['form-control'])>
                         @include('components.forms.error', ['errorKey' => 'education[0][department]'])
                     </div>
 

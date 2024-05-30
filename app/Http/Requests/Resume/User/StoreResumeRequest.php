@@ -60,8 +60,8 @@ class StoreResumeRequest extends FormRequest
             'contact.email' => ['present', 'nullable', 'email', 'max:254'],
             'contact.preferred_contact_source' => ['required', 'integer', 'numeric', 'min:0', Rule::enum(ResumeContactPreferredContactEnum::class)],
             'contact.other_sources' => ['sometimes', 'array:linkedin,telegram', 'max:2'],
-            'contact.other_sources.linkedin' => ['string'],
-            'contact.other_sources.telegram' => ['string'],
+            'contact.other_sources.linkedin' => ['string', 'nullable', 'sometimes'],
+            'contact.other_sources.telegram' => ['string', 'nullable', 'sometimes'],
 
             'personal_information' => ['required', 'array:name,surname,middle_name,birthdate,sex,city_id'],
             'personal_information.name' => ['required', 'string', 'between:2,255'],
@@ -135,5 +135,10 @@ class StoreResumeRequest extends FormRequest
 
             return $workExperience;
         }, $this->input('work_experiences')));
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        dd($validator);
     }
 }

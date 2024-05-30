@@ -3,7 +3,7 @@
         <div class="card-header">{{ $job['employer']['name'] }}</div>
         <div class="card-body">
             <h5 class="card-title">{{ $job['title'] }}</h5>
-            <p class="card-text text-truncate">{{ $job['description'] }}</p>
+            <div class="card-text text-truncate">{!!  $job['description'] !!}</div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">Зарплата: <span class="fw-bold">{{ $job['salary'] }}</span></li>
                 <li class="list-group-item">{{ $job['city']['city_with_country'] }}</li>

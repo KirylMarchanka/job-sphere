@@ -29,7 +29,7 @@
                     <a href="{{ route('employers.jobs.show', ['employer' => $employer['id'], $job['id']]) }}">{{ $job['title'] }}</a>
                 </div>
                 <div class="card-body">
-                    <p class="text-truncate">{{ $job['description'] }}</p>
+                    <p class="text-truncate">{!! $job['description'] !!}</p>
                     <p class="fw-bold">{{ $job['salary'] }}</p>
                 </div>
             @empty

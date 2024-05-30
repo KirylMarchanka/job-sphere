@@ -26,6 +26,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/test', function () {
+    $u = \App\Models\User::query()->find(12);
+    $r = $u->resumes()->create([
+        'title' => 'Химик',
+        'status' => \App\Components\Resume\Enums\StatusEnum::OPEN_TO_OPPORTUNITIES->value,
+        'salary' => 900,
+        'employment' => 0,
+        'schedule' => 0,
+        'description' => 'Химик со стажем 10+ лет',
+    ]);
+});
 Route::get('/', [MainPageController::class, 'index'])->name('index');
 
 Route::prefix('/users')->name('users.')->group(function () {

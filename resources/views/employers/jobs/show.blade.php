@@ -19,7 +19,7 @@
                         @endif
                         <div class="col-md-8">
                             <h5>Описание</h5>
-                            <p class="card-text">{{ $job['description'] }}</p>
+                            <p class="card-text">{!! $job['description'] !!}</p>
                             <h5>Квалификации и навыки</h5>
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">

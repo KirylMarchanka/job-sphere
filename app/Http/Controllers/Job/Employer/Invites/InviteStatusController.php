@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Job\Traits\JobApplyTrait;
 use App\Http\Requests\Job\Employer\Invites\JobInviteUpdateStatusRequest;
 use App\Models\JobApply;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 
 class InviteStatusController extends Controller
